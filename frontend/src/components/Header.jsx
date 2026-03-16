@@ -41,7 +41,23 @@ const Header = () => {
               <Link to="/contact" className="hp-btn hp-btn-primary">Get a Quote</Link>
             </li>
           </ul>
+          <button className="menu-toggle" onClick={toggleMenu}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </nav>
+      </div>
+
+      <div className={`mobile-overlay ${isMenuOpen ? 'open' : ''}`}>
+        <ul className="mobile-nav-links">
+          {navLinks.map((link) => (
+            <li key={link.name}>
+              <Link to={link.path} onClick={toggleMenu}>{link.name}</Link>
+            </li>
+          ))}
+          <li>
+            <Link to="/contact" className="hp-btn hp-btn-primary" onClick={toggleMenu}>Get a Quote</Link>
+          </li>
+        </ul>
       </div>
     </header>
   );

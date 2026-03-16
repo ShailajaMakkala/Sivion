@@ -104,148 +104,197 @@ const Services = () => {
 
   return (
 
-    <section className="bg-[#0F172A] pt-40 pb-24 px-6 min-h-screen">
+    <div style={{ background: '#0F172A', minHeight: '100vh', color: 'white' }}>
 
-      <div className="max-w-7xl mx-auto">
+      {/* Header Section */}
+      <section style={{
+        padding: '140px 0 60px',
+        textAlign: 'center',
+        background: 'linear-gradient(to bottom, rgba(0,210,255,0.04) 0%, transparent 100%)'
+      }}>
+        <div className="container">
+          <div className="about-badge" style={{ justifyContent: 'center', marginBottom: '20px' }}>
+            <div className="about-badge-line"></div>
+            <span className="about-badge-text">OUR SERVICES</span>
+          </div>
 
-        {/* ================= HEADER ================= */}
-
-        <div className="text-center mb-20">
-
-          <span className="text-cyan-400 font-semibold tracking-widest uppercase text-xs">
-            Our Services
-          </span>
-
-          <h1 className="text-4xl md:text-5xl font-bold text-white mt-4">
-            Innovative Technology Solutions for
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              {" "}Modern Businesses
+          <h1 style={{
+            fontSize: 'clamp(2rem, 5vw, 3.2rem)',
+            fontWeight: 700,
+            color: 'white',
+            marginBottom: '20px',
+            lineHeight: 1.2
+          }}>
+            Innovative Technology Solutions for{' '}
+            <span style={{
+              background: 'linear-gradient(90deg, #22d3ee, #3b82f6)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>
+              Modern Businesses
             </span>
           </h1>
 
-          <p className="text-slate-400 max-w-2xl mx-auto mt-5">
+          <p style={{
+            color: '#94a3b8',
+            maxWidth: '680px',
+            margin: '0 auto 30px',
+            fontSize: '1.05rem',
+            lineHeight: 1.7
+          }}>
             At SiviOn Global Technologies we deliver scalable digital solutions
             including full stack development, website development, digital
             marketing, and custom web applications designed to accelerate
             business growth.
           </p>
 
-          <div className="w-24 h-1 bg-cyan-400 mx-auto mt-8 rounded-full"></div>
-
+          <div style={{ width: '60px', height: '3px', background: 'var(--accent-cyan)', margin: '0 auto', borderRadius: '2px' }}></div>
         </div>
+      </section>
 
-        {/* ================= LOADING ================= */}
+      {/* Services Grid */}
+      <section className="container" style={{ paddingBottom: '80px' }}>
 
         {loading ? (
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '24px'
+          }}>
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="h-64 bg-white/5 rounded-xl animate-pulse"
-              />
+              <div key={i} style={{
+                height: '250px',
+                background: 'rgba(255,255,255,0.03)',
+                borderRadius: '16px'
+              }} />
             ))}
-
           </div>
-
         ) : (
 
-          /* ================= SERVICES GRID ================= */
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '24px'
+          }}>
             {services.map((service, index) => {
-
               const Icon = iconMap[service.iconName] || Code;
+              const gradientColors = {
+                'from-blue-500 to-cyan-400': 'linear-gradient(135deg, #3b82f6, #22d3ee)',
+                'from-purple-500 to-pink-400': 'linear-gradient(135deg, #a855f7, #f472b6)',
+                'from-indigo-500 to-blue-400': 'linear-gradient(135deg, #6366f1, #60a5fa)',
+                'from-green-500 to-emerald-400': 'linear-gradient(135deg, #22c55e, #34d399)',
+                'from-orange-500 to-yellow-400': 'linear-gradient(135deg, #f97316, #facc15)',
+                'from-cyan-500 to-blue-500': 'linear-gradient(135deg, #06b6d4, #3b82f6)'
+              };
 
               return (
-
                 <motion.div
                   key={service._id}
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.15 }}
-                  whileHover={{ y: -8 }}
-                  className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6 transition hover:border-cyan-400/40 hover:shadow-xl hover:shadow-cyan-500/10"
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ y: -6, borderColor: 'rgba(34,211,238,0.4)' }}
+                  style={{
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '16px',
+                    padding: '30px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'all 0.3s ease'
+                  }}
                 >
-
-                  {/* Icon */}
-
-                  <div className={`w-16 h-16 rounded-xl flex items-center justify-center bg-gradient-to-br ${service.color || 'from-cyan-500 to-blue-500'} shadow-lg mb-5`}>
-
-                    <Icon size={30} className="text-white" />
-
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: gradientColors[service.color] || 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+                    marginBottom: '20px',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.2)'
+                  }}>
+                    <Icon size={28} color="white" />
                   </div>
 
-                  {/* Title */}
-
-                  <h3 className="text-xl font-semibold text-white mb-3">
+                  <h3 style={{
+                    fontSize: '1.2rem',
+                    fontWeight: 700,
+                    color: 'white',
+                    marginBottom: '10px',
+                    letterSpacing: '-0.3px'
+                  }}>
                     {service.title}
                   </h3>
 
-                  {/* Description */}
-
-                  <p className="text-slate-400 leading-relaxed mb-6">
+                  <p style={{
+                    color: '#94a3b8',
+                    fontSize: '0.95rem',
+                    lineHeight: 1.6,
+                    marginBottom: '20px',
+                    flex: 1
+                  }}>
                     {service.shortDescription}
                   </p>
 
-                  {/* Button */}
-
-                  <Link to="/contact">
-                    <button className="flex items-center gap-2 text-cyan-400 font-semibold group">
-                      Learn More
-                      <ArrowRight
-                        size={18}
-                        className="group-hover:translate-x-1 transition"
-                      />
-                    </button>
+                  <Link to="/contact" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    color: 'var(--accent-cyan)',
+                    fontWeight: 600,
+                    fontSize: '0.9rem',
+                    marginTop: 'auto'
+                  }}>
+                    Learn More <ArrowRight size={16} />
                   </Link>
-
                 </motion.div>
-
               );
-
             })}
-
           </div>
-
         )}
 
-        {/* ================= CTA SECTION ================= */}
-
-        <div className="mt-28 text-center">
-
-          <h2 className="text-3xl font-bold text-white mb-4">
+        {/* CTA */}
+        <div style={{ textAlign: 'center', marginTop: '80px' }}>
+          <h2 style={{
+            fontSize: 'clamp(1.8rem, 4vw, 2.5rem)',
+            fontWeight: 700,
+            color: 'white',
+            marginBottom: '15px'
+          }}>
             Start Your Next Digital Project With Us
           </h2>
 
-          <p className="text-slate-400 max-w-xl mx-auto mb-8">
+          <p style={{
+            color: '#94a3b8',
+            maxWidth: '550px',
+            margin: '0 auto 30px',
+            fontSize: '1rem',
+            lineHeight: 1.7
+          }}>
             Our team helps businesses build scalable websites, modern
             applications, and powerful digital marketing strategies.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4">
-
-            <Link to="/contact">
-              <button className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-white font-semibold rounded-lg transition">
-                Get a Quote
-              </button>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '15px' }}>
+            <Link to="/contact" className="hp-btn-solid" style={{ padding: '14px 35px', fontSize: '1rem' }}>
+              Get a Quote
             </Link>
-
-            <Link to="/portfolio">
-              <button className="px-8 py-3 border border-white/20 hover:border-cyan-400 text-white font-semibold rounded-lg transition">
-                View Portfolio
-              </button>
+            <Link to="/portfolio" className="hp-btn-outline" style={{
+              padding: '14px 35px',
+              fontSize: '1rem',
+              color: 'white',
+              borderColor: 'rgba(255,255,255,0.15)',
+              background: 'rgba(255,255,255,0.03)'
+            }}>
+              View Portfolio
             </Link>
-
           </div>
-
         </div>
 
-      </div>
-
-    </section>
+      </section>
+    </div>
 
   );
 };

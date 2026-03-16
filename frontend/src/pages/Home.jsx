@@ -75,6 +75,7 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, staggerChildren: 0.1 }}
             className="hero-content"
+            style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '850px', margin: '0 auto' }}
           >
             <motion.h1 
               variants={fadeUp} 
@@ -84,19 +85,20 @@ const Home = () => {
                 fontWeight: 600,
                 lineHeight: 1.15,
                 letterSpacing: '-1px',
-                marginBottom: '1rem'
+                marginBottom: '1rem',
+                margin: '0 auto 1rem auto'
               }}
             >
               Transforming Ideas into<br />Powerful Solutions
             </motion.h1>
-            <motion.p variants={fadeUp} style={{ marginBottom: '20px' }}>
+            <motion.p variants={fadeUp} style={{ marginBottom: '20px', maxWidth: '600px', margin: '0 auto 20px auto' }}>
               Ideal IT solutions for enterprises and startups. Capability driven. Globally placed.
             </motion.p>
             
             {/* Sub-hero Stat Row */}
             <motion.div 
               variants={fadeUp}
-              style={{ display: 'flex', gap: '20px', marginBottom: '35px', color: 'rgba(255,255,255,0.7)', fontSize: '1rem', fontWeight: 500 }}
+              style={{ display: 'flex', gap: '20px', marginBottom: '35px', color: 'rgba(255,255,255,0.7)', fontSize: '1rem', fontWeight: 500, justifyContent: 'center', flexWrap: 'wrap' }}
             >
               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ color: 'var(--accent-cyan)' }}>50+</span> clients
@@ -107,7 +109,7 @@ const Home = () => {
               </span>
             </motion.div>
 
-            <motion.div variants={fadeUp} className="hero-buttons">
+            <motion.div variants={fadeUp} className="hero-buttons" style={{ display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
               <Link to="/contact" className="hp-btn hp-btn-primary">Let's Talk</Link>
               <Link to="/services" className="hp-btn hp-btn-outline" style={{ 
                 color: 'white', 
@@ -120,20 +122,15 @@ const Home = () => {
             </motion.div>
           </motion.div>
         </div>
-        <div className="hero-dots">
-          <div className="hero-dot active"></div>
-          <div className="hero-dot"></div>
-          <div className="hero-dot"></div>
-        </div>
       </section>
 
       {/* About Preview */}
       <section className="section about-section">
         <div className="about-glow"></div>
         <div className="container">
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '80px', alignItems: 'flex-start' }}>
+          <div className="about-grid-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'flex-start' }}>
             
-            <div className="about-text-column" style={{ flex: '2 1 500px' }}>
+            <div className="about-text-column" style={{ flex: '2 1 280px' }}>
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -149,7 +146,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                style={{ fontSize: '3.5rem', color: '#ffffff', marginBottom: '40px', lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}
+                style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', marginBottom: '40px', lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}
               >
                 Execution at scale,<br />built from ground up
               </motion.h2>
@@ -159,18 +156,18 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                style={{ borderLeft: '1px solid rgba(0, 210, 255, 0.2)', paddingLeft: '40px', position: 'relative' }}
+                style={{ borderLeft: '1px solid rgba(0, 210, 255, 0.2)', paddingLeft: '20px', position: 'relative' }}
               >
-                <p style={{ fontSize: '1.25rem', color: '#ffffff', lineHeight: '1.7', marginBottom: '12px', fontWeight: 500 }}>
+                <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', color: '#ffffff', lineHeight: '1.7', marginBottom: '12px', fontWeight: 500 }}>
                   SiviOn Global Technologies was founded to bridge the gap between complex enterprise requirements and scalable digital execution. We built a single delivery engine that handles robust technical architectures and engaging user interfaces with precision.
                 </p>
-                <p style={{ fontSize: '1.15rem', color: 'rgba(255,255,255,0.85)', lineHeight: '1.8', marginBottom: '0' }}>
+                <p style={{ fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)', color: 'rgba(255,255,255,0.85)', lineHeight: '1.8', marginBottom: '0' }}>
                   Today, our experts deliver high-performance Java solutions, modern web platforms, and results-oriented digital marketing for clients across the globe, spanning e-commerce, manufacturing, and fintech.
                 </p>
               </motion.div>
             </div>
 
-            <div className="about-stats-column" style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="about-stats-column" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <motion.div 
                 initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -241,7 +238,7 @@ const Home = () => {
       </section>
 
       {/* Core Services Section */}
-      <section className="section" style={{ padding: '120px 0', background: 'var(--primary-blue)', position: 'relative', overflow: 'hidden' }}>
+      <section className="section" style={{ padding: '80px 0', background: 'var(--primary-blue)', position: 'relative', overflow: 'hidden' }}>
         <div className="about-glow" style={{ top: '20%', left: '70%', opacity: 0.4 }}></div>
         <div className="container">
           <motion.div
@@ -255,7 +252,7 @@ const Home = () => {
               <div className="about-badge-line"></div>
               <span className="about-badge-text">WHAT WE DO</span>
             </div>
-            <h2 style={{ fontSize: '3.5rem', color: '#ffffff', margin: 0, lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', margin: 0, lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}>
               End-to-end digital execution.
             </h2>
           </motion.div>
@@ -267,7 +264,7 @@ const Home = () => {
               <h3 style={{ fontSize: '1.4rem', color: 'rgba(255,255,255,0.8)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Development</h3>
               <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
               {devServices.map((s, index) => (
                 <motion.div 
                   variants={fadeUp} 
@@ -311,7 +308,7 @@ const Home = () => {
               <h3 style={{ fontSize: '1.4rem', color: 'rgba(255,255,255,0.8)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Digital Marketing</h3>
               <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
               {marketingServices.map((s, index) => (
                 <motion.div 
                   variants={fadeUp} 
@@ -357,7 +354,7 @@ const Home = () => {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="section" style={{ background: 'var(--primary-blue)', color: 'white', padding: '160px 0 120px' }}>
+      <section className="section" style={{ background: 'var(--primary-blue)', color: 'white', padding: '100px 0 80px' }}>
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -370,7 +367,7 @@ const Home = () => {
               <div className="about-badge-line"></div>
               <span className="about-badge-text">WHY PARTNER WITH US?</span>
             </div>
-            <h2 style={{ fontSize: '3.5rem', color: '#ffffff', margin: 0, lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', margin: 0, lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}>
               The SiviOn Advantage
             </h2>
           </motion.div>
@@ -382,8 +379,8 @@ const Home = () => {
             transition={{ staggerChildren: 0.1 }}
             style={{ 
               display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
-              gap: '30px 80px' // Tightened row gap to 30px
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+              gap: '30px 40px'
             }}
           >
             {advantages.map((adv, i) => (
@@ -456,7 +453,7 @@ const Home = () => {
       </section>
 
       {/* Process Section */}
-      <section className="section" style={{ background: 'var(--primary-blue)', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '120px 0' }}>
+      <section className="section" style={{ background: 'var(--primary-blue)', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '80px 0' }}>
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -469,7 +466,7 @@ const Home = () => {
               <div className="about-badge-line"></div>
               <span className="about-badge-text">OUR PROCESS</span>
             </div>
-            <h2 style={{ fontSize: '3.5rem', color: '#ffffff', margin: 0, lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', margin: 0, lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}>
               How We Work
             </h2>
           </motion.div>
@@ -483,8 +480,8 @@ const Home = () => {
               transition={{ staggerChildren: 0.15 }}
               style={{ 
                 display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-                gap: '60px 40px' // Tightened gap from 80px to 60px
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                gap: '40px 30px'
               }}
             >
               {processSteps.map((step, i) => (
@@ -598,7 +595,7 @@ const Home = () => {
             <div className="about-badge-line"></div>
             <span className="about-badge-text">TECHNOLOGIES WE USE</span>
           </div>
-          <h2 style={{ fontSize: '3.5rem', color: '#ffffff', marginBottom: '40px', fontWeight: 600, letterSpacing: '-1.5px' }}>
+          <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', marginBottom: '40px', fontWeight: 600, letterSpacing: '-1.5px' }}>
             Powered by Modern Tech Stack
           </h2>
         </div>
@@ -673,7 +670,7 @@ const Home = () => {
             <div className="about-badge-line"></div>
             <span className="about-badge-text">CLIENT TRUST</span>
           </div>
-          <h2 style={{ fontSize: '3.5rem', color: '#ffffff', marginBottom: '25px', fontWeight: 600, letterSpacing: '-1.5px' }}>Trusted by Enterprises Worldwide</h2>
+          <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', marginBottom: '25px', fontWeight: 600, letterSpacing: '-1.5px' }}>Trusted by Enterprises Worldwide</h2>
           <p style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.6)', marginBottom: '60px', maxWidth: '750px', margin: '0 auto 60px', lineHeight: 1.7 }}>
             We prioritize quality and precision. Our commitment to excellence has earned us the trust of businesses looking for reliable, scalable, and secure digital architectures.
           </p>
@@ -735,8 +732,8 @@ const Home = () => {
       </section>
 
       {/* Vision Statement Section (HP Style Banner) */}
-      <section style={{ display: 'flex', flexWrap: 'wrap', minHeight: '600px', overflow: 'hidden', background: 'var(--primary-blue)' }}>
-        <div style={{ flex: '1 1 500px', padding: '100px 8%', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
+      <section style={{ display: 'flex', flexWrap: 'wrap', minHeight: '400px', overflow: 'hidden', background: 'var(--primary-blue)' }}>
+        <div style={{ flex: '1 1 300px', padding: '60px 5%', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
           <div className="about-badge" style={{ marginBottom: '25px' }}>
             <div className="about-badge-line"></div>
             <span className="about-badge-text">OUR VISION</span>
@@ -747,7 +744,7 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            style={{ fontSize: '3.5rem', color: '#ffffff', lineHeight: 1.1, fontWeight: 600, marginBottom: '35px', letterSpacing: '-1.5px', position: 'relative', zIndex: 1, maxWidth: '800px' }}
+            style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', lineHeight: 1.1, fontWeight: 600, marginBottom: '35px', letterSpacing: '-1.5px', position: 'relative', zIndex: 1, maxWidth: '800px' }}
           >
             Technology is powering the future of business.
           </motion.h2>
@@ -775,7 +772,7 @@ const Home = () => {
           </motion.div>
         </div>
         
-        <div style={{ flex: '1 1 500px', position: 'relative', minHeight: '450px', background: '#020617' }}>
+        <div style={{ flex: '1 1 300px', position: 'relative', minHeight: '300px', background: '#020617' }}>
           <img src="/vision-banner.jpg" alt="Technology Future" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.4 }} />
           <div style={{ 
             position: 'absolute', 
@@ -819,7 +816,7 @@ const Home = () => {
             <span className="about-badge-text">READY TO SCALE?</span>
           </div>
 
-          <h2 style={{ fontSize: '3.5rem', color: 'white', marginBottom: '25px', fontWeight: 600, letterSpacing: '-1.5px' }}>
+          <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: 'white', marginBottom: '25px', fontWeight: 600, letterSpacing: '-1.5px' }}>
             Ready to scale your business?
           </h2>
           <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.6)', marginBottom: '50px', maxWidth: '650px', margin: '0 auto 50px', lineHeight: 1.6 }}>
