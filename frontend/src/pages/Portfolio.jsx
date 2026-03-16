@@ -33,20 +33,20 @@ const Portfolio = () => {
     : projects.filter(p => p.category === filter);
 
   return (
-    <div className="min-h-screen bg-[#0A1128] pt-32 pb-20 overflow-x-hidden">
+    <div style={{ minHeight: '100vh', background: '#0A1128', padding: '140px 0 80px', overflowX: 'hidden', position: 'relative' }}>
       {/* Background Decor */}
-      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-cyan-500/5 blur-[150px] -z-10" />
-      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-purple-500/5 blur-[150px] -z-10" />
+      <div style={{ position: 'absolute', top: 0, right: 0, width: '50%', height: '50%', background: 'rgba(6, 182, 212, 0.05)', filter: 'blur(150px)', zIndex: -10 }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '50%', height: '50%', background: 'rgba(168, 85, 247, 0.05)', filter: 'blur(150px)', zIndex: -10 }} />
 
-      <div className="container mx-auto px-6">
+      <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         {/* Header */}
-        <div className="max-w-4xl mb-16">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-            <span className="text-cyan-400 font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Our Expertise in Action</span>
-            <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight italic">
+        <div style={{ maxWidth: '896px', margin: '0 auto 64px auto', textAlign: 'center' }}>
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+            <span style={{ color: 'var(--accent-cyan)', fontWeight: 700, letterSpacing: '0.2em', fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '16px', display: 'block' }}>Our Expertise in Action</span>
+            <h1 style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 900, color: 'white', marginBottom: '32px', letterSpacing: '-0.025em', fontStyle: 'italic', lineHeight: 1.1 }}>
               Selected Projects
             </h1>
-            <p className="text-xl text-[#94A3B8] leading-relaxed">
+            <p style={{ fontSize: '1.25rem', color: '#94A3B8', lineHeight: 1.625, margin: '0 auto', maxWidth: '800px' }}>
               Discover how we've helped leading organizations across the globe 
               transform their digital landscape with precision engineering and strategic vision.
             </p>
@@ -54,19 +54,32 @@ const Portfolio = () => {
         </div>
 
         {/* Filter Bar */}
-        <div className="flex flex-wrap items-center gap-4 mb-16">
-          <span className="text-[#94A3B8] flex items-center gap-2 text-sm font-medium mr-2">
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '64px' }}>
+          <span style={{ color: '#94A3B8', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem', fontWeight: 500, marginRight: '8px' }}>
             <Filter size={16} /> Filter by:
           </span>
           {categories.map(tab => (
             <button
               key={tab.id}
               onClick={() => setFilter(tab.id)}
-              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border ${
-                filter === tab.id 
-                  ? 'bg-cyan-500 border-cyan-500 text-[#0A1128] shadow-[0_0_20px_rgba(6,182,212,0.3)]' 
-                  : 'bg-white/5 border-white/10 text-white hover:border-cyan-500/50'
-              }`}
+              style={{
+                padding: '10px 24px',
+                borderRadius: '9999px',
+                fontSize: '0.875rem',
+                fontWeight: 700,
+                transition: 'all 0.3s ease',
+                border: filter === tab.id ? '1px solid var(--accent-cyan)' : '1px solid rgba(255,255,255,0.1)',
+                background: filter === tab.id ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.05)',
+                color: filter === tab.id ? '#0A1128' : 'white',
+                boxShadow: filter === tab.id ? '0 0 20px rgba(6,182,212,0.3)' : 'none',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                if (filter !== tab.id) e.currentTarget.style.borderColor = 'rgba(6,182,212,0.5)';
+              }}
+              onMouseLeave={(e) => {
+                if (filter !== tab.id) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+              }}
             >
               {tab.name}
             </button>
@@ -75,15 +88,15 @@ const Portfolio = () => {
 
         {/* Project Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '48px' }}>
             {[1, 2, 4].map(i => (
-              <div key={i} className="aspect-video bg-white/5 rounded-[40px] animate-pulse" />
+              <div key={i} style={{ aspectRatio: '16/9', background: 'rgba(255,255,255,0.05)', borderRadius: '40px', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
             ))}
           </div>
         ) : (
           <motion.div 
             layout
-            className="grid grid-cols-1 md:grid-cols-2 gap-12"
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '48px' }}
           >
             <AnimatePresence mode="popLayout">
               {filteredProjects.map((proj, i) => (
@@ -94,37 +107,45 @@ const Portfolio = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.5, ease: "circOut" }}
-                  className="group"
+                  style={{ group: true }}
+                  className="portfolio-card-group"
                 >
-                  <div className="relative aspect-[4/3] rounded-[40px] overflow-hidden bg-navy-800 border border-white/10">
+                  <div style={{ position: 'relative', aspectRatio: '4/3', borderRadius: '40px', overflow: 'hidden', background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <img 
                       src={proj.coverImage || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'} 
                       alt={proj.title} 
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-in-out"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(100%)', transition: 'all 0.7s ease-in-out' }}
+                      className="portfolio-card-img"
                     />
                     
                     {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A1128] via-[#0A1128]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0A1128, rgba(10,17,40,0.2), transparent)', opacity: 0.6, transition: 'opacity 0.3s ease' }} className="portfolio-card-overlay" />
                     
-                    <div className="absolute bottom-8 left-8 right-8">
-                      <div className="flex items-center gap-3 mb-4">
+                    <div style={{ position: 'absolute', bottom: '32px', left: '32px', right: '32px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
                          {(proj.technologies || []).slice(0, 3).map(tech => (
-                           <span key={tech} className="bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-widest text-white border border-white/10">
+                           <span key={tech} style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', padding: '4px 12px', borderRadius: '9999px', fontSize: '0.625rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.1em', color: 'white', border: '1px solid rgba(255,255,255,0.1)' }}>
                              {tech}
                            </span>
                          ))}
                       </div>
-                      <h3 className="text-3xl font-black text-white mb-2 italic tracking-tighter group-hover:text-cyan-400 transition-colors uppercase">
+                      <h3 style={{ fontSize: '1.875rem', fontWeight: 900, color: 'white', marginBottom: '8px', fontStyle: 'italic', letterSpacing: '-0.05em', textTransform: 'uppercase', transition: 'color 0.3s ease' }} className="portfolio-card-title">
                         {proj.title}
                       </h3>
                     </div>
 
-                    <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
-                       <a href={proj.liveUrl || '#'} target="_blank" className="w-14 h-14 bg-cyan-500 rounded-full flex items-center justify-center text-[#0A1128] hover:scale-110 transition-transform shadow-2xl">
+                    <div style={{ position: 'absolute', top: '32px', right: '32px', opacity: 0, transform: 'translateX(16px)', transition: 'all 0.3s ease' }} className="portfolio-card-link">
+                       <a href={proj.liveUrl || '#'} target="_blank" rel="noreferrer" style={{ width: '56px', height: '56px', background: 'var(--accent-cyan)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0A1128', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', transition: 'transform 0.3s ease' }}>
                           <ArrowUpRight size={24} />
                        </a>
                     </div>
                   </div>
+                  <style>{`
+                    .portfolio-card-group:hover .portfolio-card-img { filter: grayscale(0) !important; transform: scale(1.05) !important; }
+                    .portfolio-card-group:hover .portfolio-card-overlay { opacity: 0.8 !important; }
+                    .portfolio-card-group:hover .portfolio-card-title { color: var(--accent-cyan) !important; }
+                    .portfolio-card-group:hover .portfolio-card-link { opacity: 1 !important; transform: translateX(0) !important; }
+                  `}</style>
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -133,9 +154,9 @@ const Portfolio = () => {
 
         {/* Empty State */}
         {!loading && filteredProjects.length === 0 && (
-          <div className="text-center py-20 bg-white/3 rounded-[40px] border border-dashed border-white/10">
-            <h3 className="text-2xl font-bold text-white mb-2">No projects found in this category</h3>
-            <p className="text-[#94A3B8]">Try selecting a different filter or check back later.</p>
+          <div style={{ textAlign: 'center', padding: '80px 0', background: 'rgba(255,255,255,0.03)', borderRadius: '40px', border: '1px dashed rgba(255,255,255,0.1)' }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '8px' }}>No projects found in this category</h3>
+            <p style={{ color: '#94A3B8' }}>Try selecting a different filter or check back later.</p>
           </div>
         )}
 
@@ -143,15 +164,17 @@ const Portfolio = () => {
         <motion.section 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="mt-32 p-16 rounded-[60px] bg-gradient-to-br from-[#0D1B3E] to-[#0A1128] border border-white/10 text-center relative overflow-hidden"
+          style={{ marginTop: '128px', padding: '64px', borderRadius: '60px', background: 'linear-gradient(to bottom right, #0D1B3E, #0A1128)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}
         >
-          <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-cyan-500/10 blur-[100px]" />
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tight italic">
+          <div style={{ position: 'absolute', top: 0, right: 0, width: '33%', height: '33%', background: 'rgba(6, 182, 212, 0.1)', filter: 'blur(100px)' }} />
+          <h2 style={{ fontSize: 'clamp(2.25rem, 4vw, 3rem)', fontWeight: 900, color: 'white', marginBottom: '32px', letterSpacing: '-0.025em', fontStyle: 'italic', lineHeight: 1.1 }}>
             Ready to Build Your <br /> Digital Legacy?
           </h2>
           <Link 
             to="/contact" 
-            className="inline-flex items-center gap-3 bg-white text-[#0A1128] font-black px-12 py-5 rounded-full hover:bg-cyan-400 hover:text-white transition-all transform hover:scale-105 shadow-2xl"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: 'white', color: '#0A1128', fontWeight: 900, padding: '20px 48px', borderRadius: '9999px', transition: 'all 0.3s ease', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', textDecoration: 'none' }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--accent-cyan)'; e.currentTarget.style.color = 'white'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'white'; e.currentTarget.style.color = '#0A1128'; e.currentTarget.style.transform = 'scale(1)'; }}
           >
             GET IN TOUCH <ArrowUpRight size={20} />
           </Link>

@@ -98,21 +98,21 @@ const AboutUs = () => {
     <div style={{ background: colors.primaryBg, minHeight: '100vh', color: colors.white }}>
 
       {/* Breadcrumbs */}
-      <div className="container" style={{ padding: '120px 0 20px', display: 'flex', gap: '8px', fontSize: '0.9rem', color: colors.secondaryText }}>
+      <div className="container" style={{ padding: '120px 20px 20px', display: 'flex', gap: '8px', fontSize: '0.9rem', color: colors.secondaryText }}>
         <Link to="/" style={{ color: colors.accent, textDecoration: 'none' }}>Home</Link>
         <span>&gt;</span>
         <span style={{ color: colors.white }}>About</span>
       </div>
 
       {/* 1. Hero Banner */}
-      <section className="container" style={{ marginBottom: '80px' }}>
+      <section className="container" style={{ marginBottom: '60px' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           style={{
             width: '100%',
-            paddingBottom: '32%',
+            height: '250px',
             borderRadius: '16px',
             overflow: 'hidden',
             position: 'relative',
@@ -123,18 +123,19 @@ const AboutUs = () => {
             <img
               src="/about-team.jpg"
               alt="About SiviOn"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }}
             />
             <h1 style={{
               position: 'relative',
               zIndex: 1,
-              fontSize: 'min(5rem, 10vw)',
+              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
               fontWeight: 900,
               color: colors.white,
               margin: 0,
-              textShadow: '0 10px 30px rgba(0,0,0,0.8)'
+              textShadow: '0 10px 30px rgba(0,0,0,0.8)',
+              textAlign: 'center'
             }}>
-              About
+              About Us
             </h1>
           </div>
         </motion.div>
@@ -142,8 +143,8 @@ const AboutUs = () => {
 
       {/* Brand Statement */}
       <section className="container" style={{ marginBottom: '80px' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '60px', alignItems: 'center' }}>
-          <div style={{ flex: '1 1 500px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center' }}>
+          <div style={{ flex: '1 1 280px' }}>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -159,7 +160,7 @@ const AboutUs = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              style={{ fontSize: 'clamp(52px, 5vw, 60px)', fontWeight: 700, color: colors.white, lineHeight: 1.1, marginBottom: '25px' }}
+              style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 700, color: colors.white, lineHeight: 1.1, marginBottom: '25px' }}
             >
               We Build. We Deliver.<br />We Grow.
             </motion.h2>
@@ -180,14 +181,14 @@ const AboutUs = () => {
       {/* 2. Company Introduction */}
       <section style={{ padding: '100px 0' }}>
         <div className="container">
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '80px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '60px', alignItems: 'center' }}>
 
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
-              style={{ flex: '2 1 500px' }}
+              style={{ flex: '2 1 280px' }}
             >
               <div style={labelStyle}>
                 <div style={{ width: '40px', height: '1px', background: colors.accent }}></div>
@@ -204,7 +205,7 @@ const AboutUs = () => {
               </div>
             </motion.div>
 
-            <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ flex: '1 1 280px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {[
                 { title: 'FOUNDED', val: '2014', sub: 'New Delhi, India', icon: <Code2 size={24} /> },
                 { title: 'EXPERIENCE', val: '10+ Years', sub: 'Pure IT Expertise', icon: <Settings size={24} /> },
@@ -257,10 +258,9 @@ const AboutUs = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 58%) minmax(0, 38%)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '24px',
-            alignItems: 'stretch',
-            justifyContent: 'space-between'
+            alignItems: 'stretch'
           }}>
             {/* Vision Card (Left - Wider) */}
             <motion.div
@@ -341,7 +341,7 @@ const AboutUs = () => {
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
             gap: '20px'
           }}>
             {advantages.map((adv, i) => (
@@ -405,7 +405,7 @@ const AboutUs = () => {
             </h2>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px' }}>
             {cultureCards.map((card, i) => (
               <motion.div
                 key={i}
@@ -455,7 +455,7 @@ const AboutUs = () => {
                 viewport={{ once: true }}
                 variants={fadeUp}
                 transition={{ delay: i * 0.1 }}
-                style={{ flex: '1 1 250px', textAlign: 'center', padding: '30px', background: colors.cardBg, border: `1px solid ${colors.accentBorder}`, borderRadius: '20px', position: 'relative' }}
+                style={{ flex: '1 1 220px', textAlign: 'center', padding: '30px 20px', background: colors.cardBg, border: `1px solid ${colors.accentBorder}`, borderRadius: '20px', position: 'relative' }}
               >
                 <div style={{ width: '60px', height: '60px', background: colors.accent, color: colors.primaryBg, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 25px' }}>
                   {step.icon}

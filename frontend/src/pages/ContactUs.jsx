@@ -13,7 +13,7 @@ const ContactUs = () => {
       
       {/* Header */}
       <section style={{ 
-        padding: '140px 0 80px', 
+        padding: '120px 0 60px', 
         background: 'linear-gradient(to bottom, rgba(0,210,255,0.05) 0%, transparent 100%)',
         textAlign: 'center'
       }}>
@@ -26,7 +26,7 @@ const ContactUs = () => {
               <div className="about-badge-line"></div>
               <span className="about-badge-text">CONTACT US</span>
             </div>
-            <h1 style={{ fontSize: '3.5rem', fontWeight: 600, marginBottom: '20px', letterSpacing: '-1.5px' }}>
+            <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 600, marginBottom: '20px', letterSpacing: '-1.5px' }}>
               Let's Build Your Success Story
             </h1>
             <p style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.6)', maxWidth: '700px', margin: '0 auto' }}>
@@ -45,7 +45,7 @@ const ContactUs = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
-            style={{ flex: '1 1 400px' }}
+            style={{ flex: '1 1 280px' }}
           >
             <h2 style={{ fontSize: '2.2rem', fontWeight: 600, color: '#ffffff', marginBottom: '30px' }}>Get in Touch</h2>
             
@@ -136,12 +136,12 @@ const ContactUs = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
-            style={{ flex: '1 1 500px' }}
+            style={{ flex: '1 1 280px' }}
           >
             <div style={{ 
               background: 'rgba(255,255,255,0.02)', 
               border: '1px solid rgba(255,255,255,0.05)', 
-              padding: '50px', 
+              padding: '30px', 
               borderRadius: '30px',
               boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
             }}>
