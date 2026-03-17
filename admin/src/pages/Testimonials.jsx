@@ -50,7 +50,7 @@ export default function Testimonials() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {loading ? (
-             <div className="col-span-full py-12 text-center text-[#94A3B8]">Loading...</div>
+            <div className="col-span-full py-12 text-center text-[#94A3B8]">Loading...</div>
           ) : items.map(t => (
             <div key={t._id} className="bg-[#0D1B3E] border border-white/5 rounded-2xl p-6 relative overflow-hidden group">
               <Quote className="absolute top-4 right-4 text-white/5 w-12 h-12" />
@@ -89,29 +89,29 @@ export default function Testimonials() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="text-xs text-[#94A3B8] mb-1.5 block">Client Name *</label>
-                  <input value={form.clientName} onChange={e => setForm({...form, clientName: e.target.value})} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none focus:border-[#F59E0B]" required />
+                  <input value={form.clientName} onChange={e => setForm({ ...form, clientName: e.target.value })} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none focus:border-[#F59E0B]" required />
                 </div>
                 <div>
                   <label className="text-xs text-[#94A3B8] mb-1.5 block">Designation</label>
-                  <input value={form.designation} onChange={e => setForm({...form, designation: e.target.value})} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none" />
+                  <input value={form.designation} onChange={e => setForm({ ...form, designation: e.target.value })} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none" />
                 </div>
                 <div>
                   <label className="text-xs text-[#94A3B8] mb-1.5 block">Company Name</label>
-                  <input value={form.companyName} onChange={e => setForm({...form, companyName: e.target.value})} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none" />
+                  <input value={form.companyName} onChange={e => setForm({ ...form, companyName: e.target.value })} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none" />
                 </div>
               </div>
               <div>
                 <label className="text-xs text-[#94A3B8] mb-1.5 block">Testimonial Message *</label>
-                <textarea value={form.testimonialMessage} onChange={e => setForm({...form, testimonialMessage: e.target.value})} rows={4} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none resize-none focus:border-[#F59E0B]" required />
+                <textarea value={form.testimonialMessage} onChange={e => setForm({ ...form, testimonialMessage: e.target.value })} rows={4} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none resize-none focus:border-[#F59E0B]" required />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs text-[#94A3B8] mb-1.5 block">Rating (1-5)</label>
-                  <input type="number" min="1" max="5" value={form.rating} onChange={e => setForm({...form, rating: parseInt(e.target.value)})} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none" />
+                  <input type="number" min="1" max="5" value={form.rating} onChange={e => setForm({ ...form, rating: parseInt(e.target.value) })} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none" />
                 </div>
                 <div>
                   <label className="text-xs text-[#94A3B8] mb-1.5 block">Profile Photo URL</label>
-                  <input value={form.profilePhoto} onChange={e => setForm({...form, profilePhoto: e.target.value})} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none" />
+                  <input value={form.profilePhoto} onChange={e => setForm({ ...form, profilePhoto: e.target.value })} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl outline-none" />
                 </div>
               </div>
               <div className="flex gap-4 pt-4">

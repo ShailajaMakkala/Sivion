@@ -1,45 +1,78 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Code2, 
-  Monitor, 
-  BarChart, 
-  Settings, 
-  Smartphone, 
-  CheckCircle, 
-  ArrowRight, 
-  ShoppingCart, 
-  Puzzle, 
-  Wrench, 
-  Megaphone, 
-  Search, 
-  Share2, 
+import {
+  Code2,
+  Monitor,
+  BarChart,
+  Settings,
+  Smartphone,
+  CheckCircle,
+  ArrowRight,
+  ShoppingCart,
+  Puzzle,
+  Wrench,
+  Megaphone,
+  Search,
+  Share2,
   Target,
   Users,
   ShieldCheck,
   Clock,
   Tag,
   Handshake,
-  Layers
+  Layers,
+  Globe,
+  Zap
 } from 'lucide-react';
 
-const Home = () => {
-  const devServices = [
-    { title: 'Java Full Stack Development', icon: <Code2 />, desc: 'End-to-end enterprise Java solutions utilizing Spring Boot and React.' },
-    { title: 'Website Design & Development', icon: <Monitor />, desc: 'Modern, responsive corporate websites designed for conversions.' },
-    { title: 'E-commerce Development', icon: <ShoppingCart />, desc: 'Scalable online stores with seamless payment and inventory systems.' },
-    { title: 'Custom Web Applications', icon: <Puzzle />, desc: 'Tailored SAAS solutions and robust internal business portals.' },
-    { title: 'Mobile App Development', icon: <Smartphone />, desc: 'High-performance cross-platform iOS and Android applications.' },
-    { title: 'Maintenance & Support', icon: <Wrench />, desc: 'Proactive updates and technical support for zero-downtime performance.' }
-  ];
+const iconMap = {
+  Code2: <Code2 />,
+  Monitor: <Monitor />,
+  BarChart: <BarChart />,
+  Settings: <Settings />,
+  Smartphone: <Smartphone />,
+  ShoppingCart: <ShoppingCart />,
+  Puzzle: <Puzzle />,
+  Wrench: <Wrench />,
+  Megaphone: <Megaphone />,
+  Search: <Search />,
+  Share2: <Share2 />,
+  Target: <Target />,
+  Code: <Code2 />,
+  Globe: <Globe />,
+  Zap: <Zap />
+};
 
-  const marketingServices = [
-    { title: 'Digital Marketing', icon: <Megaphone />, desc: 'Strategic brand positioning and multi-channel growth campaigns.' },
-    { title: 'SEO Services', icon: <Search />, desc: 'Technical SEO and content audits to dominate search rankings.' },
-    { title: 'Social Media Marketing', icon: <Share2 />, desc: 'Engaging social strategies to build communities and brand loyalty.' },
-    { title: 'Performance Marketing', icon: <Target />, desc: 'High-ROI Google and Meta ad campaigns driven by analytics.' }
-  ];
+const Home = () => {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/services')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setServices(data.data);
+        }
+      })
+      .catch(err => console.error('Error fetching services:', err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Split services for home page groups
+  const devServicesAPI = services.filter(s =>
+    s.title.toLowerCase().includes('java') ||
+    s.title.toLowerCase().includes('web') ||
+    s.title.toLowerCase().includes('ecommerce') ||
+    s.title.toLowerCase().includes('app')
+  );
+
+  const marketingServicesAPI = services.filter(s =>
+    s.title.toLowerCase().includes('marketing') ||
+    s.title.toLowerCase().includes('seo') ||
+    s.title.toLowerCase().includes('social')
+  );
 
   const advantages = [
     { title: 'Skilled Team of Developers', icon: <Users />, desc: 'Project-hardened engineers with deep expertise in modern architectures.' },
@@ -51,12 +84,12 @@ const Home = () => {
   ];
 
   const processSteps = [
-    { title: 'Requirements', desc: 'Deep-dive into your business goals and technical needs.' },
-    { title: 'Strategic Planning', desc: 'Defining the architecture and delivery roadmap.' },
-    { title: 'Design & UX Phase', desc: 'Crafting intuitive and high-fidelity user experiences.' },
-    { title: 'Agile Development', desc: 'Iterative coding cycles with regular feedback loops.' },
-    { title: 'Rigorous Testing', desc: 'End-to-end QA, performance, and security audits.' },
-    { title: 'Delivery & Support', desc: 'Seamless deployment followed by proactive maintenance.' }
+    { title: 'Requirements', desc: 'Deep-dive into your business goals and technical needs.', icon: <Target size={24} /> },
+    { title: 'Strategic Planning', desc: 'Defining the architecture and delivery roadmap.', icon: <BarChart size={24} /> },
+    { title: 'Design & UX Phase', desc: 'Crafting intuitive and high-fidelity user experiences.', icon: <Monitor size={24} /> },
+    { title: 'Agile Development', desc: 'Iterative coding cycles with regular feedback loops.', icon: <Code2 size={24} /> },
+    { title: 'Rigorous Testing', desc: 'End-to-end QA, performance, and security audits.', icon: <CheckCircle size={24} /> },
+    { title: 'Delivery & Support', desc: 'Seamless deployment followed by proactive maintenance.', icon: <Globe size={24} /> }
   ];
 
   const fadeUp = {
@@ -67,7 +100,7 @@ const Home = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="hero">
+      <section className="hero" style={{ paddingTop: '100px' }}>
         <div className="container">
           <motion.div
             initial="hidden"
@@ -75,49 +108,46 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, staggerChildren: 0.1 }}
             className="hero-content"
-            style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '850px', margin: '0 auto' }}
+            style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', maxWidth: '900px', margin: '0 0 0 0' }}
           >
-            <motion.h1 
-              variants={fadeUp} 
-              style={{ 
-                maxWidth: '850px',
-                fontSize: 'clamp(2.5rem, 6vw, 3.75rem)', // text-6xl with fluid scaling
-                fontWeight: 600,
-                lineHeight: 1.15,
-                letterSpacing: '-1px',
-                marginBottom: '1rem',
-                margin: '0 auto 1rem auto'
+            <motion.h1
+              variants={fadeUp}
+              style={{
+                fontSize: 'clamp(2.2rem, 6vw, 3.8rem)',
+                fontWeight: 800,
+                lineHeight: 1.1,
+                letterSpacing: '-1.5px',
+                marginBottom: '20px',
+                color: 'var(--color-bisque)'
               }}
             >
-              Transforming Ideas into<br />Powerful Solutions
+              Engineering the Next Digital Era
             </motion.h1>
-            <motion.p variants={fadeUp} style={{ marginBottom: '20px', maxWidth: '600px', margin: '0 auto 20px auto' }}>
-              Ideal IT solutions for enterprises and startups. Capability driven. Globally placed.
-            </motion.p>
-            
-            {/* Sub-hero Stat Row */}
-            <motion.div 
-              variants={fadeUp}
-              style={{ display: 'flex', gap: '20px', marginBottom: '35px', color: 'rgba(255,255,255,0.7)', fontSize: '1rem', fontWeight: 500, justifyContent: 'center', flexWrap: 'wrap' }}
-            >
-              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ color: 'var(--accent-cyan)' }}>50+</span> clients
-              </span>
-              <span style={{ color: 'rgba(255,255,255,0.3)' }}>|</span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ color: 'var(--accent-cyan)' }}>12+</span> countries
-              </span>
-            </motion.div>
 
-            <motion.div variants={fadeUp} className="hero-buttons" style={{ display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
-              <Link to="/contact" className="hp-btn hp-btn-primary">Let's Talk</Link>
-              <Link to="/services" className="hp-btn hp-btn-outline" style={{ 
-                color: 'white', 
-                backgroundColor: 'rgba(255, 255, 255, 0.1)', 
-                borderColor: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(5px)'
+            <motion.p variants={fadeUp} style={{
+              marginBottom: '35px',
+              maxWidth: '600px',
+              fontSize: '1.1rem',
+              color: 'var(--color-bisque)',
+              opacity: 0.85,
+              lineHeight: 1.5
+            }}>
+              Engineer. Innovate. Scale.
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="hero-buttons" style={{ display: 'flex', justifyContent: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
+              <Link to="/contact" className="hp-btn-solid" style={{ padding: '18px 45px', fontSize: '1.1rem', background: 'var(--accent-orange)', color: '#fff' }}>Initiate Proposal</Link>
+              <Link to="/services" className="hp-btn-outline" style={{
+                padding: '18px 45px',
+                borderRadius: '30px',
+                fontWeight: 700,
+                fontSize: '1.1rem',
+                backdropFilter: 'blur(10px)',
+                background: 'rgba(255,255,255,0.05)',
+                borderColor: 'var(--color-bisque)',
+                color: 'var(--color-bisque)'
               }}>
-                Our Offerings
+                View Offerings
               </Link>
             </motion.div>
           </motion.div>
@@ -129,9 +159,9 @@ const Home = () => {
         <div className="about-glow"></div>
         <div className="container">
           <div className="about-grid-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'flex-start' }}>
-            
+
             <div className="about-text-column" style={{ flex: '2 1 280px' }}>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -141,24 +171,24 @@ const Home = () => {
                 <span className="about-badge-text">ABOUT SIVION</span>
               </motion.div>
 
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', marginBottom: '40px', lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}
+                style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: 'var(--color-bisque)', marginBottom: '40px', lineHeight: 1.1, fontWeight: 600, letterSpacing: '-1.5px' }}
               >
-                Execution at scale,<br />built from ground up
+                Execution at scale, built from the ground up
               </motion.h2>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
                 style={{ borderLeft: '1px solid rgba(0, 210, 255, 0.2)', paddingLeft: '20px', position: 'relative' }}
               >
-                <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', color: '#ffffff', lineHeight: '1.7', marginBottom: '12px', fontWeight: 500 }}>
+                <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', color: 'var(--color-bisque)', lineHeight: '1.7', marginBottom: '12px', fontWeight: 500, opacity: 0.9 }}>
                   SiviOn Global Technologies was founded to bridge the gap between complex enterprise requirements and scalable digital execution. We built a single delivery engine that handles robust technical architectures and engaging user interfaces with precision.
                 </p>
                 <p style={{ fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)', color: 'rgba(255,255,255,0.85)', lineHeight: '1.8', marginBottom: '0' }}>
@@ -167,52 +197,42 @@ const Home = () => {
               </motion.div>
             </div>
 
-            <div className="about-stats-column" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <motion.div 
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="about-card-stat"
-              >
-                <div className="about-card-icon"><Code2 size={28} /></div>
-                <div className="about-card-info">
-                  <h4 style={{ fontWeight: 900, letterSpacing: '-0.5px' }}>Founded</h4>
-                  <p style={{ fontWeight: 900, color: 'var(--accent-cyan)' }}>2014</p>
-                  <span>New Delhi, India</span>
-                </div>
-              </motion.div>
+            <div className="about-stats-column" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {[
+                { label: 'Founded', val: '2014', sub: 'New Delhi, India', icon: <Code2 size={24} /> },
+                { label: 'Experience', val: '10+ Years', sub: 'Pure IT Expertise', icon: <Settings size={24} /> },
+                { label: 'Sectors', val: 'Integrated', sub: 'Java • Web • Digital', icon: <BarChart size={24} /> }
+              ].map((stat, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  className="glass-card"
+                  style={{ padding: '25px', display: 'flex', alignItems: 'center', gap: '20px' }}
+                >
+                  <div style={{
+                    width: '50px',
+                    height: '50px',
+                    background: 'rgba(0, 210, 255, 0.1)',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--accent-cyan)',
+                    flexShrink: 0
+                  }}>
+                    {stat.icon}
+                  </div>
+                  <div>
+                    <h5 style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 5px 0' }}>{stat.label}</h5>
+                    <p style={{ color: 'var(--accent-green)', fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>{stat.val}</p>
+                    <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>{stat.sub}</span>
+                  </div>
+                </motion.div>
+              ))}
 
-              <motion.div 
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="about-card-stat"
-              >
-                <div className="about-card-icon"><Settings size={28} /></div>
-                <div className="about-card-info">
-                  <h4 style={{ fontWeight: 900, letterSpacing: '-0.5px' }}>Experience</h4>
-                  <p style={{ fontWeight: 900, color: 'var(--accent-cyan)' }}>10+ Years</p>
-                  <span>Pure IT Expertise</span>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="about-card-stat"
-              >
-                <div className="about-card-icon"><BarChart size={28} /></div>
-                <div className="about-card-info">
-                  <h4 style={{ fontWeight: 900, letterSpacing: '-0.5px' }}>Sectors</h4>
-                  <p style={{ fontWeight: 900, color: 'var(--accent-cyan)' }}>Java • Web • Digital</p>
-                  <span>Integrated delivery</span>
-                </div>
-              </motion.div>
-              
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -227,8 +247,7 @@ const Home = () => {
             </div>
 
           </div>
-          
-          {/* Logo Strip / Divider Anchor */}
+
           <div style={{ marginTop: '100px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '60px', display: 'flex', justifyContent: 'center', opacity: 0.5 }}>
             <div style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600, letterSpacing: '4px', textTransform: 'uppercase', fontSize: '0.9rem' }}>
               Trusted Partner for Digital Transformation
@@ -246,7 +265,7 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            style={{ marginBottom: '45px' }} // Reduced from 80px
+            style={{ marginBottom: '45px' }}
           >
             <div className="about-badge" style={{ marginBottom: '20px' }}>
               <div className="about-badge-line"></div>
@@ -258,92 +277,144 @@ const Home = () => {
           </motion.div>
 
           {/* Development Group */}
-          <div style={{ marginBottom: '80px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
-              <div style={{ width: '20px', height: '2px', background: 'var(--accent-cyan)' }}></div>
-              <h3 style={{ fontSize: '1.4rem', color: 'rgba(255,255,255,0.8)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Development</h3>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
+          {devServicesAPI.length > 0 && (
+            <div style={{ marginBottom: '80px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
+                <div style={{ width: '20px', height: '2px', background: 'var(--accent-cyan)' }}></div>
+                <h3 style={{ fontSize: '1.4rem', color: 'rgba(255,255,255,0.8)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Development</h3>
+                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+                {devServicesAPI.map((s, index) => (
+                  <motion.div
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    key={s._id}
+                    className="glass-card"
+                    style={{
+                      padding: '40px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: '100%'
+                    }}
+                  >
+                    <div style={{
+                      color: 'var(--accent-cyan)',
+                      marginBottom: '25px',
+                      width: '64px',
+                      height: '64px',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      background: 'rgba(0, 210, 255, 0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid rgba(0, 210, 255, 0.2)'
+                    }}>
+                      {s.coverImage ? (
+                        <img src={s.coverImage} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        React.cloneElement(iconMap[s.iconName] || <Zap size={32} />, { size: 32 })
+                      )}
+                    </div>
+                    <h4 style={{ fontSize: '1.6rem', color: '#ffffff', marginBottom: '15px', fontWeight: 800, letterSpacing: '-0.5px' }}>{s.title}</h4>
+                    <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1.05rem', marginBottom: '30px', lineHeight: 1.6, flexGrow: 1 }}>{s.shortDescription}</p>
+                    <Link to={`/services/${s._id}`} style={{ color: 'var(--accent-cyan)', fontSize: '0.95rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', transition: 'gap 0.3s ease' }} className="service-link">
+                      Learn More <ArrowRight size={16} />
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
-              {devServices.map((s, index) => (
-                <motion.div 
-                  variants={fadeUp} 
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  whileHover={{ 
-                    borderColor: 'var(--accent-cyan)', 
-                    boxShadow: '0 0 40px rgba(0, 210, 255, 0.15)',
-                    borderLeftWidth: '5px' // Distinct hover effect
-                  }}
-                  key={index} 
-                  style={{ 
-                    padding: '35px', 
-                    background: 'rgba(255,255,255,0.02)', 
-                    border: '1px solid rgba(255,255,255,0.08)', 
-                    borderLeft: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '16px',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}
-                >
-                  <div style={{ color: 'var(--accent-cyan)', marginBottom: '25px' }}>
-                    {React.cloneElement(s.icon, { size: 32 })}
-                  </div>
-                  <h4 style={{ fontSize: '1.5rem', color: '#ffffff', marginBottom: '12px', fontWeight: 900, letterSpacing: '-0.5px' }}>{s.title}</h4>
-                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.05rem', marginBottom: '20px', lineHeight: 1.5 }}>{s.desc}</p>
-                  <div style={{ marginTop: 'auto', color: 'var(--accent-cyan)', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    Learn More <ArrowRight size={14} />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          )}
 
           {/* Marketing Group */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
-              <div style={{ width: '20px', height: '2px', background: 'var(--accent-cyan)' }}></div>
-              <h3 style={{ fontSize: '1.4rem', color: 'rgba(255,255,255,0.8)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Digital Marketing</h3>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
+          {marketingServicesAPI.length > 0 && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
+                <div style={{ width: '20px', height: '2px', background: 'var(--accent-cyan)' }}></div>
+                <h3 style={{ fontSize: '1.4rem', color: 'rgba(255,255,255,0.8)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>Digital Marketing</h3>
+                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+                {marketingServicesAPI.map((s, index) => (
+                  <motion.div
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    key={s._id}
+                    className="glass-card"
+                    style={{
+                      padding: '40px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: '100%'
+                    }}
+                  >
+                    <div style={{
+                      color: 'var(--accent-cyan)',
+                      marginBottom: '25px',
+                      width: '64px',
+                      height: '64px',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      background: 'rgba(0, 210, 255, 0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid rgba(0, 210, 255, 0.2)'
+                    }}>
+                      {s.coverImage ? (
+                        <img src={s.coverImage} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        React.cloneElement(iconMap[s.iconName] || <Zap size={32} />, { size: 32 })
+                      )}
+                    </div>
+                    <h4 style={{ fontSize: '1.6rem', color: '#ffffff', marginBottom: '15px', fontWeight: 800, letterSpacing: '-0.5px' }}>{s.title}</h4>
+                    <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1.05rem', marginBottom: '30px', lineHeight: 1.6, flexGrow: 1 }}>{s.shortDescription}</p>
+                    <Link to={`/services/${s._id}`} style={{ color: 'var(--accent-cyan)', fontSize: '0.95rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      Learn More <ArrowRight size={16} />
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
-              {marketingServices.map((s, index) => (
-                <motion.div 
-                  variants={fadeUp} 
+          )}
+
+          {/* Unified list if not split */}
+          {devServicesAPI.length === 0 && marketingServicesAPI.length === 0 && services.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+              {services.map((s) => (
+                <motion.div
+                  variants={fadeUp}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  whileHover={{ 
-                    borderColor: 'var(--accent-cyan)', 
-                    boxShadow: '0 0 40px rgba(0, 210, 255, 0.15)',
-                    borderLeftWidth: '5px' 
-                  }}
-                  key={index} 
-                  style={{ 
-                    padding: '35px', 
-                    background: 'rgba(255,255,255,0.02)', 
+                  key={s._id}
+                  style={{
+                    padding: '35px',
+                    background: 'rgba(255,255,255,0.02)',
                     border: '1px solid rgba(255,255,255,0.08)',
-                    borderLeft: '1px solid rgba(255,255,255,0.08)',
                     borderRadius: '16px',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     display: 'flex',
                     flexDirection: 'column'
                   }}
                 >
                   <div style={{ color: 'var(--accent-cyan)', marginBottom: '25px' }}>
-                    {React.cloneElement(s.icon, { size: 32 })}
+                    {iconMap[s.iconName] || <Zap size={32} />}
                   </div>
-                  <h4 style={{ fontSize: '1.5rem', color: '#ffffff', marginBottom: '12px', fontWeight: 900, letterSpacing: '-0.5px' }}>{s.title}</h4>
-                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.05rem', marginBottom: '20px', lineHeight: 1.5 }}>{s.desc}</p>
-                  <div style={{ marginTop: 'auto', color: 'var(--accent-cyan)', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <h4 style={{ fontSize: '1.5rem', color: '#ffffff', marginBottom: '12px', fontWeight: 900 }}>{s.title}</h4>
+                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.05rem', marginBottom: '20px' }}>{s.shortDescription}</p>
+                  <Link to={`/services/${s._id}`} style={{ marginTop: 'auto', color: 'var(--accent-cyan)', fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px' }}>
                     Learn More <ArrowRight size={14} />
-                  </div>
+                  </Link>
                 </motion.div>
               ))}
             </div>
-          </div>
+          )}
 
           <div style={{ textAlign: 'center', marginTop: '100px' }}>
             <Link to="/services" className="hp-btn-solid" style={{ padding: '18px 50px', fontSize: '1.1rem' }}>
@@ -377,69 +448,51 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             transition={{ staggerChildren: 0.1 }}
-            style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
               gap: '30px 40px'
             }}
           >
             {advantages.map((adv, i) => (
-              <motion.div 
-                variants={fadeUp} 
-                whileHover={{ y: -5 }}
-                key={i} 
-                style={{ 
-                  display: 'flex', 
-                  gap: '24px', 
-                  padding: '10px 10px 30px 10px',
-                  position: 'relative',
-                  group: 'true',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)' // Subtle row separator
+              <motion.div
+                variants={fadeUp}
+                key={i}
+                className="glass-card"
+                style={{
+                  display: 'flex',
+                  gap: '24px',
+                  padding: '35px',
+                  alignItems: 'flex-start'
                 }}
               >
-                {/* Visual Left Accent on Hover */}
-                <div style={{ 
-                  width: '50px', 
-                  height: '50px', 
-                  background: 'rgba(0, 210, 255, 0.08)', 
-                  borderRadius: '12px', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
+                <div style={{
+                  width: '56px',
+                  height: '56px',
+                  background: 'rgba(0, 210, 255, 0.1)',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   flexShrink: 0,
                   color: 'var(--accent-cyan)',
-                  transition: 'all 0.3s ease'
+                  border: '1px solid rgba(0, 210, 255, 0.2)'
                 }}>
-                  {React.cloneElement(adv.icon, { size: 24 })}
+                  {React.cloneElement(adv.icon, { size: 28 })}
                 </div>
-                
+
                 <div style={{ flex: 1 }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 900, margin: '0 0 8px 0', color: '#ffffff', letterSpacing: '-0.5px' }}>{adv.title}</h3>
-                  <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.5)', margin: 0, lineHeight: 1.5, maxWidth: '350px' }}>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 10px 0', color: '#ffffff', letterSpacing: '-0.5px' }}>{adv.title}</h3>
+                  <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.6)', margin: 0, lineHeight: 1.6 }}>
                     {adv.desc}
                   </p>
-                  
-                  {/* Subtle Underline Accent */}
-                  <div className="adv-accent" style={{ 
-                    width: '0%', 
-                    height: '2px', 
-                    background: 'var(--accent-cyan)', 
-                    marginTop: '15px',
-                    transition: 'width 0.3s ease'
-                  }}></div>
                 </div>
-                
-                {/* CSS logic for hover logic */}
-                <style>{`
-                  div[group="true"]:hover .adv-accent { width: 40px !important; }
-                  div[group="true"]:hover > div:first-child { background: var(--accent-cyan) !important; color: var(--primary-blue) !important; transform: scale(1.1); }
-                `}</style>
               </motion.div>
             ))}
           </motion.div>
 
           {/* Section Bottom CTA */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -471,113 +524,68 @@ const Home = () => {
             </h2>
           </motion.div>
 
-          {/* 3x2 Grid for Balanced Layout */}
-          <div style={{ position: 'relative', maxWidth: '1000px', margin: '0 auto' }}>
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ staggerChildren: 0.15 }}
-              style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-                gap: '40px 30px'
-              }}
-            >
-              {processSteps.map((step, i) => (
-                <motion.div 
-                  variants={fadeUp} 
-                  key={i} 
-                  style={{ 
-                    textAlign: 'center', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    position: 'relative'
-                  }}
-                >
-                  {/* Horizontal Dashed Connector */}
-                  {(i % 3 !== 2 && i < 5) && (
-                    <div style={{ 
-                      position: 'absolute', 
-                      top: '25px', 
-                      left: 'calc(50% + 35px)', 
-                      width: 'calc(100% - 70px)', 
-                      height: '2px', 
-                      borderTop: '2px dashed rgba(0, 210, 255, 0.4)',
-                      zIndex: 0
-                    }}></div>
-                  )}
+          <div className="process-container">
+            <div className="process-line"></div>
+            {processSteps.map((step, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className="process-step"
+              >
+                <div className="process-content">
+                  <h4 className="process-title">{step.title}</h4>
+                  <p className="process-desc">{step.desc}</p>
+                </div>
 
-                  {/* Snake/Vertical Connector between Row 1 and Row 2 (Step 3 to 4) */}
-                  {i === 2 && (
-                    <div style={{ 
-                      position: 'absolute', 
-                      top: '50px', 
-                      right: 'calc(50%)', 
-                      height: '60px', 
-                      width: '2px', 
-                      borderLeft: '2px dashed rgba(0, 210, 255, 0.4)',
-                      zIndex: 0,
-                      transform: 'translateY(10px)'
-                    }}></div>
-                  )}
+                <div className="process-icon-wrap">
+                  {step.icon}
+                </div>
 
-                  {/* Number Node with Hover Interaction & Pulse */}
-                  <motion.div 
-                    whileHover={{ 
-                      scale: 1.1, 
-                      backgroundColor: 'var(--accent-cyan)', 
-                      color: 'var(--primary-blue)', 
-                      boxShadow: '0 0 30px rgba(0, 210, 255, 0.6)'
-                    }}
-                    transition={{
-                      scale: {
-                        duration: 0.4,
-                        repeat: Infinity,
-                        repeatType: "reverse"
-                      }
-                    }}
-                    style={{ 
-                      width: '50px', 
-                      height: '50px', 
-                      background: 'var(--primary-blue)', 
-                      border: '2px solid var(--accent-cyan)', 
-                      borderRadius: '50%', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      color: 'var(--accent-cyan)', 
-                      fontWeight: 800, 
-                      fontSize: '1.1rem',
-                      marginBottom: '25px',
-                      boxShadow: '0 0 20px rgba(0, 210, 255, 0.1)',
-                      zIndex: 2,
-                      transition: 'background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease',
-                      cursor: 'default'
-                    }}
-                  >
-                    {i + 1}
-                  </motion.div>
-                  
-                  {/* Step Info */}
-                  <h4 style={{ fontSize: '1.4rem', color: '#ffffff', marginBottom: '12px', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.5px' }}>{step.title}</h4>
-                  <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.5)', margin: 0, lineHeight: 1.6, maxWidth: '240px' }}>{step.desc} </p>
-                </motion.div>
-              ))}
-            </motion.div>
+                <div style={{ width: '45%' }} className="process-empty-hidden-mobile"></div>
+              </motion.div>
+            ))}
           </div>
 
-          {/* Process Section Bottom CTA */}
-          <motion.div 
+          <style>{`
+            @media (max-width: 768px) {
+              .process-empty-hidden-mobile { display: none; }
+              .hero {
+                padding-top: 80px !important;
+                padding-bottom: 60px !important;
+              }
+              .hero-content {
+                text-align: left !important;
+                align-items: flex-start !important;
+                margin: 0 !important;
+              }
+              .about-badge {
+                justify-content: flex-start !important;
+              }
+              .hero-buttons {
+                justify-content: flex-start !important;
+                gap: 12px !important;
+              }
+              .hero-buttons .hp-btn-solid, 
+              .hero-buttons .hp-btn-outline {
+                padding: 12px 24px !important;
+                font-size: 0.95rem !important;
+              }
+              .service-link:hover { gap: 12px !important; }
+            }
+          `}</style>
+
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             style={{ textAlign: 'center', marginTop: '100px' }}
           >
             <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '25px', fontSize: '1.1rem' }}>Ready to begin?</p>
-            <Link to="/contact" className="hp-btn-solid" style={{ 
-              padding: '18px 50px', 
+            <Link to="/contact" className="hp-btn-solid" style={{
+              padding: '18px 50px',
               fontSize: '1.1rem',
               background: 'var(--accent-cyan)',
               color: 'var(--primary-blue)'
@@ -600,7 +608,6 @@ const Home = () => {
           </h2>
         </div>
 
-        {/* Infinite Marquee Wrapper */}
         <div style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', padding: '20px 0', position: 'relative' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, var(--bg-navy-alt), transparent 15%, transparent 85%, var(--bg-navy-alt))', zIndex: 2, pointerEvents: 'none' }}></div>
           <motion.div
@@ -626,37 +633,28 @@ const Home = () => {
               { name: 'SEO Tools', color: '#00a300' },
               { name: 'Google Ads', color: '#4285f4' },
               { name: 'Meta Ads', color: '#0668e1' },
-              // Duplicates for seamless loop
               { name: 'Java', color: '#f89820' },
               { name: 'Spring Boot', color: '#6db33f' },
               { name: 'Hibernate', color: '#bcae79' },
               { name: 'REST APIs', color: '#00d2ff' },
               { name: 'MySQL', color: '#4479a1' },
-              { name: 'PostgreSQL', color: '#336791' },
-              { name: 'HTML', color: '#e34f26' },
-              { name: 'CSS', color: '#1572b6' },
-              { name: 'JavaScript', color: '#f7df1e' }
+              { name: 'PostgreSQL', color: '#336791' }
             ].map((tech, i) => (
-              <motion.div 
-                key={i} 
-                whileHover={{ scale: 1.05, borderColor: tech.color, boxShadow: `0 0 25px ${tech.color}44`, backgroundColor: 'rgba(255,255,255,0.05)' }}
-                style={{ 
-                  background: 'rgba(255,255,255,0.02)', 
-                  padding: '18px 35px', 
-                  borderRadius: '16px', 
-                  border: '1px solid rgba(255,255,255,0.08)',
+              <motion.div
+                key={i}
+                className="glass-card"
+                whileHover={{ scale: 1.05, borderColor: tech.color, boxShadow: `0 0 25px ${tech.color}44` }}
+                style={{
+                  padding: '15px 30px',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '15px',
+                  gap: '12px',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  borderRadius: '30px'
                 }}
               >
-                <div style={{ width: '28px', height: '28px', color: tech.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {/* Simplistic Icon Representational Circle/Dot */}
-                  <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: tech.color, boxShadow: `0 0 10px ${tech.color}` }}></div>
-                </div>
-                <span style={{ fontWeight: 700, color: 'white', fontSize: '1.2rem', letterSpacing: '0.5px' }}>{tech.name}</span>
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: tech.color, boxShadow: `0 0 8px ${tech.color}` }}></div>
+                <span style={{ fontWeight: 700, color: 'var(--color-bisque)', fontSize: '1.1rem', letterSpacing: '0.5px' }}>{tech.name}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -679,172 +677,96 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             transition={{ staggerChildren: 0.15 }}
-            style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
-              gap: '24px', 
-              maxWidth: '1200px', 
-              margin: '0 auto' 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '24px',
+              maxWidth: '1200px',
+              margin: '0 auto'
             }}
           >
-            {[
-              { num: '99%', label: 'Client Retention', sub: 'across all core engagements' },
-              { num: '24/7', label: 'Expert Support', sub: 'dedicated technical assistance' },
-              { num: '50+', label: 'Projects Delivered', sub: 'successful end-to-end executions' },
-              { num: 'ISO', label: '9001:2015', sub: 'Certified Quality Management' }
-            ].map((stat, i) => (
-              <motion.div 
-                key={i} 
-                variants={fadeUp} 
-                whileHover={{ y: -10, borderColor: 'var(--accent-cyan)', boxShadow: '0 10px 30px rgba(0, 210, 255, 0.15)' }} 
-                style={{ 
-                  padding: '40px 20px', 
-                  background: 'rgba(255,255,255,0.02)', 
-                  border: '1px solid rgba(255,255,255,0.08)', 
-                  borderTop: '2px solid transparent', // Subtle top accent placeholder
-                  borderRadius: '20px', 
-                  transition: 'all 0.3s ease',
-                  cursor: 'default'
-                }}
-              >
-                <style>{`
-                  div.trust-card:hover { border-top-color: var(--accent-cyan) !important; }
-                `}</style>
-                <h3 style={{ 
-                  fontSize: stat.num === 'ISO' ? '3.5rem' : '3.2rem', // Slightly larger for ISO to match weight
-                  color: 'var(--accent-cyan)', 
-                  marginBottom: '5px', 
-                  fontWeight: 900,
-                  letterSpacing: stat.num === 'ISO' ? '2px' : 'normal' 
-                }}>
-                  {stat.num}
-                </h3>
-                <p style={{ fontWeight: 700, color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
-                  {stat.label}
-                </p>
-                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem', margin: 0, lineHeight: 1.4 }}>
-                  {stat.sub}
-                </p>
-              </motion.div>
-            ))}
+            <div className="stats-grid">
+              {[
+                { num: '99%', label: 'Client Retention', sub: 'across all core engagements', highlight: 'var(--accent-green)' },
+                { num: '24/7', label: 'Expert Support', sub: 'dedicated technical assistance', highlight: 'var(--accent-green)' },
+                { num: '50+', label: 'Projects Delivered', sub: 'successful end-to-end executions', highlight: 'var(--accent-green)' },
+                { num: 'ISO', label: '9001:2015', sub: 'Certified Quality Management', highlight: 'var(--accent-green)' }
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  variants={fadeUp}
+                  className="stat-item"
+                >
+                  <h3 className="stat-num" style={{ color: stat.highlight || 'inherit' }}>{stat.num}</h3>
+                  <p className="stat-label">{stat.label}</p>
+                  <p className="stat-sub">{stat.sub}</p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Vision Statement Section (HP Style Banner) */}
-      <section style={{ display: 'flex', flexWrap: 'wrap', minHeight: '400px', overflow: 'hidden', background: 'var(--primary-blue)' }}>
-        <div style={{ flex: '1 1 300px', padding: '60px 5%', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
-          <div className="about-badge" style={{ marginBottom: '25px' }}>
-            <div className="about-badge-line"></div>
-            <span className="about-badge-text">OUR VISION</span>
-          </div>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#ffffff', lineHeight: 1.1, fontWeight: 600, marginBottom: '35px', letterSpacing: '-1.5px', position: 'relative', zIndex: 1, maxWidth: '800px' }}
-          >
-            Technology is powering the future of business.
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: '45px', maxWidth: '580px', position: 'relative', zIndex: 1 }}
-          >
-            From modern web applications to scalable data architectures, SiviOn's technology enables mastery: enhancing performance, precision, and efficiency for enterprises worldwide.
-          </motion.p>
-          
+      <section style={{ position: 'relative', minHeight: '600px', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+        <img src="/vision-banner.jpg" alt="Technology Future" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, var(--primary-blue), transparent, var(--primary-blue))', opacity: 0.8 }}></div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 10 }}>
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ position: 'relative', zIndex: 1 }}
+            style={{
+              maxWidth: '850px',
+              padding: '40px 0',
+              margin: '0 auto',
+              textAlign: 'center'
+            }}
           >
-            <Link to="/about" className="hp-btn-solid" style={{ padding: '16px 36px' }}>
-              See How We Build &rarr;
-            </Link>
+            <div className="about-badge" style={{ justifyContent: 'center', marginBottom: '25px' }}>
+              <div className="about-badge-line" style={{ background: 'var(--color-bisque)' }}></div>
+              <span className="about-badge-text" style={{ color: 'var(--color-bisque)' }}>OUR VISION</span>
+            </div>
+            <h2 style={{ fontSize: 'clamp(1.8rem, 4.5vw, 2.8rem)', color: 'var(--color-bisque)', lineHeight: 1.2, fontWeight: 800, marginBottom: '25px', letterSpacing: '-1.5px' }}>
+              Technology is powering the future of business
+            </h2>
+            <p style={{ fontSize: '1.15rem', color: 'var(--color-bisque)', opacity: 0.8, lineHeight: 1.7, marginBottom: '40px', maxWidth: '650px', margin: '0 auto 40px' }}>
+              From modern web applications to scalable data architectures, SiviOn's technology enables mastery in a rapidly evolving digital landscape.
+            </p>
+            <Link to="/about" className="hp-btn-solid" style={{ padding: '16px 40px' }}>See Our Execution Strategy &rarr;</Link>
           </motion.div>
-        </div>
-        
-        <div style={{ flex: '1 1 300px', position: 'relative', minHeight: '300px', background: '#020617' }}>
-          <img src="/vision-banner.jpg" alt="Technology Future" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.4 }} />
-          <div style={{ 
-            position: 'absolute', 
-            inset: 0, 
-            background: 'linear-gradient(to right, var(--primary-blue) 0%, var(--primary-blue) 10%, transparent 60%, rgba(2, 6, 23, 0.8) 100%)' 
-          }}></div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="section" style={{ 
-        textAlign: 'center', 
-        padding: '120px 0', 
-        background: 'radial-gradient(circle at top, var(--navy-light) 0%, var(--primary-blue) 100%)', 
-        color: 'white',
+      <section className="section" style={{
+        textAlign: 'center',
+        padding: '120px 0',
+        background: 'var(--primary-blue)',
         position: 'relative',
         overflow: 'hidden'
       }}>
-        {/* Subtle decorative glow */}
-        <div style={{ 
-          position: 'absolute', 
-          top: '-20%', 
-          left: '50%', 
-          transform: 'translateX(-50%)', 
-          width: '80%', 
-          height: '100%', 
-          background: 'radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%)',
-          zIndex: 0
-        }}></div>
+        <div className="about-glow green-glow" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: 0.3, width: '80%', height: '80%' }}></div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
           className="container"
           style={{ position: 'relative', zIndex: 1 }}
         >
-          <div className="about-badge" style={{ justifyContent: 'center', marginBottom: '30px' }}>
-            <div className="about-badge-line"></div>
-            <span className="about-badge-text">READY TO SCALE?</span>
-          </div>
-
-          <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: 'white', marginBottom: '25px', fontWeight: 600, letterSpacing: '-1.5px' }}>
-            Ready to scale your business?
-          </h2>
-          <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.6)', marginBottom: '50px', maxWidth: '650px', margin: '0 auto 50px', lineHeight: 1.6 }}>
-            Consult with our expert developers and marketing strategists today. Let's build your digital success story together.
-          </p>
-          
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
-            <Link to="/contact" className="hp-btn-solid" style={{ padding: '18px 45px', fontSize: '1.1rem' }}>
-              Get a Quote
-            </Link>
-            <Link to="/contact" className="hp-btn-outline" style={{ 
-              padding: '18px 45px', 
-              fontSize: '1.1rem', 
-              color: 'white', 
-              borderColor: 'var(--accent-cyan)',
-              background: 'rgba(255, 255, 255, 0.05)'
-            }}>
-              Contact Us
-            </Link>
-            <Link to="/contact" className="hp-btn-outline" style={{ 
-              padding: '18px 45px', 
-              fontSize: '1.1rem', 
-              color: 'white', 
-              borderColor: 'var(--accent-green)',
-              background: 'rgba(255, 255, 255, 0.05)'
-            }}>
-              Book Consultation
-            </Link>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <div className="about-badge" style={{ justifyContent: 'center', marginBottom: '30px' }}>
+              <div className="about-badge-line" style={{ background: 'var(--color-bisque)' }}></div>
+              <span className="about-badge-text" style={{ color: 'var(--color-bisque)' }}>READY TO SCALE?</span>
+            </div>
+            <h2 style={{ fontSize: 'clamp(1.8rem, 4.5vw, 2.5rem)', fontWeight: 800, marginBottom: '20px', letterSpacing: '-1.2px', color: 'var(--color-bisque)', lineHeight: 1.1 }}>
+              Let's Build the Future Together
+            </h2>
+            <p style={{ fontSize: '1.1rem', color: 'var(--color-bisque)', opacity: 0.7, maxWidth: '600px', margin: '0 auto 40px', lineHeight: 1.6 }}>
+              Connect with our team today and discover how SiviOn Global Technologies can accelerate your digital growth with precision engineering.
+            </p>
+            <Link to="/contact" className="hp-btn-solid" style={{ padding: '16px 45px', fontSize: '1.1rem', background: 'var(--accent-orange)' }}>Get Started Today &rarr;</Link>
           </div>
         </motion.div>
       </section>

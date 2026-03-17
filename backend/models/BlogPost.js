@@ -6,6 +6,7 @@ const blogPostSchema = new mongoose.Schema({
   author: { type: String, default: 'SiviOn Team' },
   category: { type: String },
   coverImage: { type: String },
+  excerpt: { type: String },
   content: { type: String },
   metaTitle: { type: String },
   metaDescription: { type: String },

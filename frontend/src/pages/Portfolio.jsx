@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Filter, Target } from 'lucide-react';
+import { ArrowUpRight, Filter, Target, Code2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Portfolio = () => {
@@ -129,14 +129,22 @@ const Portfolio = () => {
                            </span>
                          ))}
                       </div>
-                      <h3 style={{ fontSize: '1.875rem', fontWeight: 900, color: 'white', marginBottom: '8px', fontStyle: 'italic', letterSpacing: '-0.05em', textTransform: 'uppercase', transition: 'color 0.3s ease' }} className="portfolio-card-title">
+                      <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: 'white', marginBottom: '8px', fontStyle: 'italic', letterSpacing: '-0.05em', textTransform: 'uppercase', transition: 'color 0.3s ease' }} className="portfolio-card-title">
                         {proj.title}
                       </h3>
+                      <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', lineHeight: 1.4, marginBottom: '0', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {proj.shortDescription}
+                      </p>
                     </div>
 
-                    <div style={{ position: 'absolute', top: '32px', right: '32px', opacity: 0, transform: 'translateX(16px)', transition: 'all 0.3s ease' }} className="portfolio-card-link">
-                       <a href={proj.liveUrl || '#'} target="_blank" rel="noreferrer" style={{ width: '56px', height: '56px', background: 'var(--accent-cyan)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0A1128', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', transition: 'transform 0.3s ease' }}>
-                          <ArrowUpRight size={24} />
+                    <div style={{ position: 'absolute', top: '32px', right: '32px', opacity: 0, transform: 'translateX(16px)', transition: 'all 0.3s ease', display: 'flex', gap: '12px' }} className="portfolio-card-link">
+                       {proj.githubUrl && (
+                         <a href={proj.githubUrl} target="_blank" rel="noreferrer" style={{ width: '48px', height: '48px', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', border: '1px solid rgba(255,255,255,0.1)', transition: 'all 0.3s ease' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}>
+                            <Code2 size={20} />
+                         </a>
+                       )}
+                       <a href={proj.liveUrl || '#'} target="_blank" rel="noreferrer" style={{ width: '48px', height: '48px', background: 'var(--accent-cyan)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0A1128', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', transition: 'transform 0.3s ease' }}>
+                          <ArrowUpRight size={20} />
                        </a>
                     </div>
                   </div>

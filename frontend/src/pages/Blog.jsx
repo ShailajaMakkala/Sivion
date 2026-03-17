@@ -1,51 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, User, ArrowRight, Rss } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Blog = () => {
-  const blogs = [
-    {
-      title: 'Java Development Trends 2026: What Enterprises Need to Know',
-      category: 'Java Development',
-      author: 'Technical Team',
-      date: 'March 10, 2026',
-      desc: 'Explore the latest shifts in Java ecosystems, from Project Loom to the evolution of Spring Boot 3.x for microservices.',
-      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      title: '5 Website Development Tips to Boost Conversion Rates',
-      category: 'Web Design',
-      author: 'UX Lab',
-      date: 'March 14, 2026',
-      desc: 'Learn how technical performance, accessibility, and intuitive UI patterns can drastically improve user retention.',
-      image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      title: 'Digital Marketing Strategies for High-Growth Startups',
-      category: 'Digital Marketing',
-      author: 'Growth Strategist',
-      date: 'March 16, 2026',
-      desc: 'A comprehensive guide to multi-channel customer acquisition and scaling your brand footprint effectively.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      title: 'SEO Best Practices: Dominating Search in 2026',
-      category: 'SEO',
-      author: 'SEO Expert',
-      date: 'March 18, 2026',
-      desc: 'Why technical SEO is no longer optional. Deep dive into Core Web Vitals and semantic content structures.',
-      image: 'https://images.unsplash.com/photo-1562577309-4932fdd64cd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      title: 'Accelerating Business Growth Through Strategic Technology',
-      category: 'Business Growth',
-      author: 'Consultancy Lead',
-      date: 'March 20, 2026',
-      desc: 'How choosing the right technical architecture today prevents expensive technical debt and scaling bottlenecks tomorrow.',
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    }
-  ];
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/blog')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setBlogs(data.data);
+        }
+      })
+      .catch(err => console.error('Error fetching blogs:', err))
+      .finally(() => setLoading(false));
+  }, []);
 
   const fadeUp = {
     hidden: { opacity: 0, y: 30 },
@@ -75,58 +47,73 @@ const Blog = () => {
 
       {/* Blog Grid */}
       <section className="section container" style={{ paddingBottom: '120px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '40px' }}>
-          {blogs.map((blog, i) => (
-            <motion.div 
-              key={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              transition={{ delay: i * 0.1 }}
-              style={{ 
-                background: 'rgba(255,255,255,0.02)', 
-                border: '1px solid rgba(255,255,255,0.05)', 
-                borderRadius: '24px', 
-                overflow: 'hidden',
-                transition: 'all 0.3s ease'
-              }}
-              whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'var(--accent-cyan)' }}
-            >
-              <div style={{ height: '240px', overflow: 'hidden' }}>
-                <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div style={{ padding: '40px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <span style={{ color: 'var(--accent-cyan)', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                    {blog.category}
-                  </span>
-                  <div style={{ display: 'flex', gap: '15px', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Calendar size={14} /> {blog.date}</span>
+        {loading ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px' }}>
+            {[1, 2, 3].map(i => (
+               <div key={i} style={{ height: '400px', background: 'rgba(255,255,255,0.02)', borderRadius: '24px' }}></div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '40px' }}>
+            {blogs.length > 0 ? (
+              blogs.map((blog, i) => (
+                <motion.div 
+                  key={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeUp}
+                  transition={{ delay: i * 0.1 }}
+                  style={{ 
+                    background: 'rgba(255,255,255,0.02)', 
+                    border: '1px solid rgba(255,255,255,0.05)', 
+                    borderRadius: '24px', 
+                    overflow: 'hidden',
+                    transition: 'all 0.3s ease'
+                  }}
+                  whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'var(--accent-cyan)' }}
+                >
+                  <div style={{ height: '240px', overflow: 'hidden' }}>
+                    <img src={blog.coverImage || '/vision-banner.jpg'} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
-                </div>
-                <h3 style={{ fontSize: '1.6rem', fontWeight: 600, color: 'white', marginBottom: '20px', lineHeight: 1.3 }}>
-                  {blog.title}
-                </h3>
-                <p style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: '30px', fontSize: '1.05rem' }}>
-                  {blog.desc}
-                </p>
-                
-                <Link to={`#`} style={{ 
-                  display: 'inline-flex', 
-                  alignItems: 'center', 
-                  gap: '10px', 
-                  color: 'white', 
-                  textDecoration: 'none',
-                  fontWeight: 600,
-                  fontSize: '0.95rem'
-                }}>
-                  Read Full Article <ArrowRight size={16} />
-                </Link>
+                  <div style={{ padding: '40px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                      <span style={{ color: 'var(--accent-cyan)', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        {blog.category}
+                      </span>
+                      <div style={{ display: 'flex', gap: '15px', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Calendar size={14} /> {new Date(blog.createdAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <h3 style={{ fontSize: '1.6rem', fontWeight: 600, color: 'white', marginBottom: '20px', lineHeight: 1.3 }}>
+                      {blog.title}
+                    </h3>
+                    <p style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: '30px', fontSize: '1.05rem', display: '-webkit-box', WebkitLineClamp: '3', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      {blog.excerpt || blog.content?.substring(0, 150) + '...'}
+                    </p>
+                    
+                    <Link to={`/blog/${blog._id}`} style={{ 
+                      display: 'inline-flex', 
+                      alignItems: 'center', 
+                      gap: '10px', 
+                      color: 'white', 
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                      fontSize: '0.95rem'
+                    }}>
+                      Read Full Article <ArrowRight size={16} />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '100px 0', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '24px' }}>
+                <h3 style={{ color: 'white', marginBottom: '10px' }}>No Blog Posts Found</h3>
+                <p style={{ color: 'rgba(255,255,255,0.6)' }}>Please add blog articles from the admin panel.</p>
               </div>
-            </motion.div>
-          ))}
-        </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Newsletter */}

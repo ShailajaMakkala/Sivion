@@ -112,7 +112,7 @@ const AboutUs = () => {
           transition={{ duration: 0.8 }}
           style={{
             width: '100%',
-            height: '250px',
+            height: '400px',
             borderRadius: '16px',
             overflow: 'hidden',
             position: 'relative',
@@ -121,22 +121,10 @@ const AboutUs = () => {
         >
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <img
-              src="/about-team.jpg"
+              src="/about-banner-new.jpg"
               alt="About SiviOn"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 1.0 }}
             />
-            <h1 style={{
-              position: 'relative',
-              zIndex: 1,
-              fontSize: 'clamp(2.5rem, 8vw, 4rem)',
-              fontWeight: 900,
-              color: colors.white,
-              margin: 0,
-              textShadow: '0 10px 30px rgba(0,0,0,0.8)',
-              textAlign: 'center'
-            }}>
-              About Us
-            </h1>
           </div>
         </motion.div>
       </section>

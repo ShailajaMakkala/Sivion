@@ -28,56 +28,7 @@ const iconMap = {
    Default Services
 ========================= */
 
-const defaultServices = [
-  {
-    _id: "1",
-    title: "Java Full Stack Development",
-    shortDescription:
-      "End-to-end Java application development using Spring Boot, REST APIs, and modern frontend frameworks.",
-    iconName: "Code",
-    color: "from-blue-500 to-cyan-400"
-  },
-  {
-    _id: "2",
-    title: "Website Design & Development",
-    shortDescription:
-      "Professional business websites with clean UI, mobile-first design, and SEO-ready structure.",
-    iconName: "Globe",
-    color: "from-purple-500 to-pink-400"
-  },
-  {
-    _id: "3",
-    title: "Web Application Development",
-    shortDescription:
-      "Full-featured web applications with scalable architecture and modern frameworks.",
-    iconName: "Zap",
-    color: "from-indigo-500 to-blue-400"
-  },
-  {
-    _id: "4",
-    title: "Digital Marketing Services",
-    shortDescription:
-      "Complete digital marketing solutions including SEO, paid ads, and campaign management.",
-    iconName: "BarChart",
-    color: "from-green-500 to-emerald-400"
-  },
-  {
-    _id: "5",
-    title: "SEO Services",
-    shortDescription:
-      "Technical and on-page SEO strategies to improve rankings and drive organic traffic.",
-    iconName: "Search",
-    color: "from-orange-500 to-yellow-400"
-  },
-  {
-    _id: "6",
-    title: "Website Maintenance & Support",
-    shortDescription:
-      "Ongoing updates, security monitoring, and performance optimization for your website.",
-    iconName: "Headphones",
-    color: "from-cyan-500 to-blue-500"
-  }
-];
+// No default services - use database only
 
 const Services = () => {
 
@@ -92,13 +43,11 @@ const Services = () => {
     fetch("/api/services")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.data.length > 0) {
+        if (data.success) {
           setServices(data.data);
-        } else {
-          setServices(defaultServices);
         }
       })
-      .catch(() => setServices(defaultServices))
+      .catch((err) => console.error("Error fetching services:", err))
       .finally(() => setLoading(false));
   }, []);
 
@@ -176,82 +125,95 @@ const Services = () => {
             gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
             gap: '24px'
           }}>
-            {services.map((service, index) => {
-              const Icon = iconMap[service.iconName] || Code;
-              const gradientColors = {
-                'from-blue-500 to-cyan-400': 'linear-gradient(135deg, #3b82f6, #22d3ee)',
-                'from-purple-500 to-pink-400': 'linear-gradient(135deg, #a855f7, #f472b6)',
-                'from-indigo-500 to-blue-400': 'linear-gradient(135deg, #6366f1, #60a5fa)',
-                'from-green-500 to-emerald-400': 'linear-gradient(135deg, #22c55e, #34d399)',
-                'from-orange-500 to-yellow-400': 'linear-gradient(135deg, #f97316, #facc15)',
-                'from-cyan-500 to-blue-500': 'linear-gradient(135deg, #06b6d4, #3b82f6)'
-              };
+            {services.length > 0 ? (
+              services.map((service, index) => {
+                const Icon = iconMap[service.iconName] || Code;
+                const gradientColors = {
+                  'from-blue-500 to-cyan-400': 'linear-gradient(135deg, #3b82f6, #22d3ee)',
+                  'from-purple-500 to-pink-400': 'linear-gradient(135deg, #a855f7, #f472b6)',
+                  'from-indigo-500 to-blue-400': 'linear-gradient(135deg, #6366f1, #60a5fa)',
+                  'from-green-500 to-emerald-400': 'linear-gradient(135deg, #22c55e, #34d399)',
+                  'from-orange-500 to-yellow-400': 'linear-gradient(135deg, #f97316, #facc15)',
+                  'from-cyan-500 to-blue-500': 'linear-gradient(135deg, #06b6d4, #3b82f6)'
+                };
 
-              return (
-                <motion.div
-                  key={service._id}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -6, borderColor: 'rgba(34,211,238,0.4)' }}
-                  style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: '16px',
-                    padding: '30px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  <div style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '14px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: gradientColors[service.color] || 'linear-gradient(135deg, #06b6d4, #3b82f6)',
-                    marginBottom: '20px',
-                    boxShadow: '0 8px 20px rgba(0,0,0,0.2)'
-                  }}>
-                    <Icon size={28} color="white" />
-                  </div>
+                return (
+                  <motion.div
+                    key={service._id}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{ y: -6, borderColor: 'rgba(34,211,238,0.4)' }}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '16px',
+                      padding: '30px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    <div style={{
+                      width: '64px',
+                      height: '64px',
+                      borderRadius: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: service.coverImage ? 'transparent' : (gradientColors[service.color] || 'linear-gradient(135deg, #06b6d4, #3b82f6)'),
+                      marginBottom: '20px',
+                      boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
+                      overflow: 'hidden',
+                      border: service.coverImage ? '1px solid rgba(255,255,255,0.1)' : 'none'
+                    }}>
+                      {service.coverImage ? (
+                        <img src={service.coverImage} alt={service.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <Icon size={32} color="white" />
+                      )}
+                    </div>
 
-                  <h3 style={{
-                    fontSize: '1.2rem',
-                    fontWeight: 700,
-                    color: 'white',
-                    marginBottom: '10px',
-                    letterSpacing: '-0.3px'
-                  }}>
-                    {service.title}
-                  </h3>
+                    <h3 style={{
+                      fontSize: '1.2rem',
+                      fontWeight: 700,
+                      color: 'white',
+                      marginBottom: '10px',
+                      letterSpacing: '-0.3px'
+                    }}>
+                      {service.title}
+                    </h3>
 
-                  <p style={{
-                    color: '#94a3b8',
-                    fontSize: '0.95rem',
-                    lineHeight: 1.6,
-                    marginBottom: '20px',
-                    flex: 1
-                  }}>
-                    {service.shortDescription}
-                  </p>
+                    <p style={{
+                      color: '#94a3b8',
+                      fontSize: '0.95rem',
+                      lineHeight: 1.6,
+                      marginBottom: '20px',
+                      flex: 1
+                    }}>
+                      {service.shortDescription}
+                    </p>
 
-                  <Link to="/contact" style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    color: 'var(--accent-cyan)',
-                    fontWeight: 600,
-                    fontSize: '0.9rem',
-                    marginTop: 'auto'
-                  }}>
-                    Learn More <ArrowRight size={16} />
-                  </Link>
-                </motion.div>
-              );
-            })}
+                    <Link to={`/services/${service._id}`} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      color: 'var(--accent-cyan)',
+                      fontWeight: 600,
+                      fontSize: '0.9rem',
+                      marginTop: 'auto'
+                    }}>
+                      Learn More <ArrowRight size={16} />
+                    </Link>
+                  </motion.div>
+                );
+              })
+            ) : (
+              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '100px 0', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '16px' }}>
+                <h3 style={{ color: 'white', marginBottom: '10px' }}>No Services Found</h3>
+                <p style={{ color: '#94a3b8' }}>Please add services from the admin panel.</p>
+              </div>
+            )}
           </div>
         )}
 

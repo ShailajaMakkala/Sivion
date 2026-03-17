@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Project = require('../models/Project');
 const authMiddleware = require('../middleware/auth');
-const { upload } = require('../config/cloudinary');
+const { upload } = require('../config/multer'); // Switch to local upload
 
 // Public: Get all published projects
 router.get('/', async (req, res) => {
@@ -24,18 +24,40 @@ router.get('/admin/all', authMiddleware, async (req, res) => {
   }
 });
 
-// Admin: Create project with Cloudinary Upload
+// Admin: Create project
 router.post('/admin', authMiddleware, upload.single('image'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.coverImage = req.file.path; // Cloudinary URL
-    if (data.technologies && typeof data.technologies === 'string') {
-        data.technologies = data.technologies.split(',').map(t => t.trim());
+    
+    // Convert local file path to URL
+    if (req.file) data.coverImage = `/uploads/portfolio/${req.file.filename}`;
+    
+    // Map 'client' and 'description' from frontend to schema
+    if (data.client) {
+        data.clientName = data.client;
+        delete data.client;
     }
+    if (data.description) {
+        data.shortDescription = data.description;
+        delete data.description;
+    }
+
+    // Parse technologies (handle both string and JSON)
+    if (data.technologies) {
+        try {
+            const parsed = JSON.parse(data.technologies);
+            data.technologies = Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+            if (typeof data.technologies === 'string') {
+                data.technologies = data.technologies.split(',').map(t => t.trim()).filter(t => t !== '');
+            }
+        }
+    }
+    
     const project = await Project.create(data);
     res.status(201).json({ success: true, data: project });
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 
@@ -43,14 +65,32 @@ router.post('/admin', authMiddleware, upload.single('image'), async (req, res) =
 router.put('/admin/:id', authMiddleware, upload.single('image'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.coverImage = req.file.path;
-    if (data.technologies && typeof data.technologies === 'string') {
-        data.technologies = data.technologies.split(',').map(t => t.trim());
+    if (req.file) data.coverImage = `/uploads/portfolio/${req.file.filename}`;
+    
+    if (data.client) {
+        data.clientName = data.client;
+        delete data.client;
     }
+    if (data.description) {
+        data.shortDescription = data.description;
+        delete data.description;
+    }
+
+    if (data.technologies) {
+        try {
+            const parsed = JSON.parse(data.technologies);
+            data.technologies = Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+            if (typeof data.technologies === 'string') {
+                data.technologies = data.technologies.split(',').map(t => t.trim()).filter(t => t !== '');
+            }
+        }
+    }
+
     const project = await Project.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json({ success: true, data: project });
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

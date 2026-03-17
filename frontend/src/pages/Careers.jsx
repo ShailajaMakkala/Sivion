@@ -1,36 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, GraduationCap, Users, FileText, Send, MapPin, Clock } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Careers = () => {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', phone: '', jobTitle: '', resumeLink: '' });
+
+  useEffect(() => {
+    fetch('/api/careers')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setJobs(data.data);
+        }
+      })
+      .catch(err => console.error('Error fetching jobs:', err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.jobTitle) { toast.error('Please select a target role'); return; }
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/careers/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Application submitted successfully!');
+        setForm({ name: '', email: '', phone: '', jobTitle: '', resumeLink: '' });
+      } else {
+        toast.error(data.message || 'Submission failed');
+      }
+    } catch (err) {
+      toast.error('Connection error. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const fadeUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
   };
-
-  const openings = [
-    {
-      title: 'Junior Java Developer',
-      type: 'Full-time | Remote/Hybrid',
-      location: 'New Delhi, India',
-      exp: 'Freshers & Trainees Welcome',
-      desc: 'Join our core engineering team. You will work on enterprise-grade Java architectures using Spring Boot and Hibernate.'
-    },
-    {
-      title: 'Digital Marketing Specialist',
-      type: 'Full-time',
-      location: 'New Delhi, India',
-      exp: '1-3 Years Experience',
-      desc: 'Drive ROI for global clients through SEO, Google Ads, and Meta Ads management. Data-driven mindset required.'
-    },
-    {
-      title: 'Web Development Internship',
-      type: '3-6 Months Paid Internship',
-      location: 'Remote',
-      exp: 'Final Year Students / Freshers',
-      desc: 'Learn high-performance web development using React, Tailwind, and modern CI/CD workflows under expert mentorship.'
-    }
-  ];
 
   return (
     <div style={{ background: 'var(--primary-blue)', minHeight: '100vh', color: 'white' }}>
@@ -64,42 +82,53 @@ const Careers = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-              {openings.map((job, i) => (
-                <motion.div 
-                  key={i}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeUp}
-                  transition={{ delay: i * 0.1 }}
-                  style={{ 
-                    background: 'rgba(255,255,255,0.02)', 
-                    border: '1px solid rgba(255,255,255,0.05)', 
-                    borderRadius: '20px', 
-                    padding: '35px',
-                    position: 'relative',
-                    transition: 'all 0.3s ease'
-                  }}
-                  whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'var(--accent-cyan)' }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                    <div>
-                      <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'white', marginBottom: '8px' }}>{job.title}</h3>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.4)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Clock size={14} /> {job.type}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><MapPin size={14} /> {job.location}</span>
+              {loading ? (
+                [1, 2].map(i => (
+                  <div key={i} style={{ height: '150px', background: 'rgba(255,255,255,0.02)', borderRadius: '20px' }}></div>
+                ))
+              ) : jobs.filter(j => j.isActive).length > 0 ? (
+                jobs.filter(j => j.isActive).map((job, i) => (
+                  <motion.div 
+                    key={job._id}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeUp}
+                    transition={{ delay: i * 0.1 }}
+                    style={{ 
+                      background: 'rgba(255,255,255,0.02)', 
+                      border: '1px solid rgba(255,255,255,0.05)', 
+                      borderRadius: '20px', 
+                      padding: '35px',
+                      position: 'relative',
+                      transition: 'all 0.3s ease'
+                    }}
+                    whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'var(--accent-cyan)' }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+                      <div>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'white', marginBottom: '8px' }}>{job.title}</h3>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.4)' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Clock size={14} /> {job.type}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><MapPin size={14} /> {job.location}</span>
+                        </div>
                       </div>
+                      <span style={{ background: 'rgba(0,210,255,0.1)', color: 'var(--accent-cyan)', padding: '6px 15px', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 700 }}>
+                        {job.experience}
+                      </span>
                     </div>
-                    <span style={{ background: 'rgba(0,210,255,0.1)', color: 'var(--accent-cyan)', padding: '6px 15px', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 700 }}>
-                      {job.exp}
-                    </span>
-                  </div>
-                  <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>{job.desc}</p>
-                </motion.div>
-              ))}
+                    <p style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, margin: 0 }}>{job.description}</p>
+                  </motion.div>
+                ))
+              ) : (
+                <div style={{ textAlign: 'center', padding: '60px', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '20px' }}>
+                   <h3 style={{ color: 'white', marginBottom: '10px' }}>No Current Openings</h3>
+                   <p style={{ color: 'rgba(255,255,255,0.6)' }}>We are always looking for talent. Please check back later or send us your resume.</p>
+                </div>
+              )}
             </div>
             
-            <div style={{ marginTop: '50px', p: '30px', background: 'rgba(58, 237, 178, 0.05)', borderRadius: '20px', border: '1px solid rgba(58, 237, 178, 0.1)', display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <div style={{ marginTop: '50px', padding: '30px', background: 'rgba(58, 237, 178, 0.05)', borderRadius: '20px', border: '1px solid rgba(58, 237, 178, 0.1)', display: 'flex', gap: '20px', alignItems: 'center' }}>
               <div style={{ background: 'rgba(58, 237, 178, 0.1)', padding: '15px', borderRadius: '12px', color: '#3aedb2' }}>
                 <GraduationCap size={32} />
               </div>
@@ -130,37 +159,37 @@ const Careers = () => {
                 <h3 style={{ fontSize: '1.8rem', fontWeight: 600, color: 'white', margin: 0 }}>Apply Now</h3>
               </div>
               
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '20px' }}>
                   <label style={labelStyle}>Full Name</label>
-                  <input type="text" placeholder="John Doe" style={inputStyle} required />
+                  <input type="text" value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="Enter your name" style={inputStyle} required />
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                   <label style={labelStyle}>Email Address</label>
-                  <input type="email" placeholder="john@example.com" style={inputStyle} required />
+                  <input type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="Enter your email" style={inputStyle} required />
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                   <label style={labelStyle}>Phone / WhatsApp</label>
-                  <input type="tel" placeholder="+91 00000 00000" style={inputStyle} required />
+                  <input type="tel" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} placeholder="Enter your mobile number" style={inputStyle} required />
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                   <label style={labelStyle}>Target Role</label>
-                  <select style={inputStyle} required>
+                  <select value={form.jobTitle} onChange={e => setForm({...form, jobTitle: e.target.value})} style={inputStyle} required>
                     <option value="">Select a role</option>
-                    <option value="java">Junior Java Developer</option>
-                    <option value="marketing">Digital Marketing Specialist</option>
-                    <option value="intern">Internship (Web/Digital)</option>
+                    {!loading && jobs.map(job => (
+                      <option key={job._id || job.id} value={job.title}>{job.title}</option>
+                    ))}
                     <option value="other">Other Potential Role</option>
                   </select>
                 </div>
                 <div style={{ marginBottom: '30px' }}>
                   <label style={labelStyle}>Resume / CV Link</label>
-                  <input type="url" placeholder="Google Drive / Dropbox Link" style={inputStyle} required />
+                  <input type="url" value={form.resumeLink} onChange={e => setForm({...form, resumeLink: e.target.value})} placeholder="Enter Portfolio or Drive Link" style={inputStyle} required />
                   <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)', marginTop: '8px' }}>Ensure the link is viewable by our recruitment team.</p>
                 </div>
 
-                <button type="submit" className="hp-btn-solid" style={{ width: '100%', height: '60px', borderRadius: '15px', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                  Submit Application <Send size={20} />
+                <button type="submit" disabled={submitting} className="hp-btn-solid" style={{ width: '100%', height: '60px', borderRadius: '15px', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                  {submitting ? 'Submitting...' : 'Submit Application'} <Send size={20} />
                 </button>
               </form>
             </motion.div>

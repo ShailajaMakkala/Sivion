@@ -1,8 +1,8 @@
-import React from 'react'
+import { Link } from 'react-router-dom'
 
-export default function StatCard({ label, value, icon: Icon, color = '#06B6D4', sub }) {
-  return (
-    <div className="bg-[#0D1B3E] border border-white/5 rounded-xl p-5 flex items-center gap-4">
+export default function StatCard({ label, value, icon: Icon, color = '#06B6D4', sub, to }) {
+  const content = (
+    <div className={`bg-[#0D1B3E] border border-white/5 rounded-xl p-5 flex items-center gap-4 transition-all ${to ? 'hover:border-white/10 hover:bg-white/3' : ''}`}>
       <div
         className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
         style={{ backgroundColor: `${color}15`, color }}
@@ -16,4 +16,7 @@ export default function StatCard({ label, value, icon: Icon, color = '#06B6D4', 
       </div>
     </div>
   )
+
+  if (to) return <Link to={to}>{content}</Link>
+  return content
 }

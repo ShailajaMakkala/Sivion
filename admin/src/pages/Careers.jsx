@@ -43,7 +43,7 @@ export default function Careers() {
 
   const toggleStatus = async (job) => {
     try {
-      await api.put(`/careers/admin/${job.id}`, { ...job, status: job.status === 'active' ? 'inactive' : 'active' })
+      await api.put(`/careers/admin/${job._id}`, { ...job, status: job.status === 'active' ? 'inactive' : 'active' })
       toast.success('Status updated')
       load()
     } catch { toast.error('Failed to update status') }
@@ -51,7 +51,7 @@ export default function Careers() {
 
   const startEdit = (job) => {
     setForm({ title: job.title, department: job.department || 'Engineering', location: job.location, type: job.type, experience: job.experience, description: job.description, responsibilities: (job.responsibilities || []).join('\n'), requirements: (job.requirements || []).join('\n'), applicationEmail: job.applicationEmail || '', status: job.status })
-    setEditId(job.id)
+    setEditId(job._id)
     setShowForm(true)
   }
 
@@ -85,7 +85,7 @@ export default function Careers() {
                 </thead>
                 <tbody>
                   {jobs.map(job => (
-                    <tr key={job.id} className="border-b border-white/5 hover:bg-white/2 transition-colors">
+                    <tr key={job._id} className="border-b border-white/5 hover:bg-white/2 transition-colors">
                       <td className="px-6 py-3">
                         <div className="text-white font-medium">{job.title}</div>
                         <div className="text-[#94A3B8] text-xs">{job.experience}</div>
@@ -107,7 +107,7 @@ export default function Careers() {
                       <td className="px-6 py-3">
                         <div className="flex gap-2 justify-end">
                           <button onClick={() => startEdit(job)} className="text-[#94A3B8] hover:text-[#06B6D4] p-1.5 rounded hover:bg-[#06B6D4]/10 transition-colors"><Pencil size={15} /></button>
-                          <button onClick={() => setDeleteTarget(job.id)} className="text-[#94A3B8] hover:text-red-400 p-1.5 rounded hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
+                          <button onClick={() => setDeleteTarget(job._id)} className="text-[#94A3B8] hover:text-red-400 p-1.5 rounded hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
                         </div>
                       </td>
                     </tr>

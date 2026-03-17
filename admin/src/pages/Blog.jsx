@@ -66,7 +66,7 @@ export default function Blog() {
 
   const startEdit = (post) => {
     setForm({ title: post.title, slug: post.slug, excerpt: post.excerpt || '', content: post.content || '', category: post.category, author: post.author || 'SiviOn Team', status: post.status, image: post.image || '' })
-    setEditId(post.id)
+    setEditId(post._id)
     setShowForm(true)
   }
 

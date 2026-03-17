@@ -140,6 +140,10 @@ export default function Services() {
                 <label className="text-sm text-[#94A3B8]">Cover Image URL</label>
                 <input value={form.coverImage} onChange={e => setForm({ ...form, coverImage: e.target.value })} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl mt-1.5" />
               </div>
+              <div>
+                <label className="text-sm text-[#94A3B8]">Technologies (comma separated)</label>
+                <input value={form.technologies?.join(', ') || ''} onChange={e => setForm({ ...form, technologies: e.target.value.split(',').map(s => s.trim()).filter(s => s !== '') })} className="w-full bg-[#0A1128] border border-white/10 text-white px-4 py-2.5 rounded-xl mt-1.5" placeholder="Java, Spring Boot, React..." />
+              </div>
               <div className="flex gap-4 pt-4">
                 <button type="submit" disabled={saving} className="flex-1 bg-[#06B6D4] text-white py-2.5 rounded-xl font-semibold hover:bg-[#0891B2] transition-all disabled:opacity-50">
                   {saving ? 'Saving...' : 'Save Service'}

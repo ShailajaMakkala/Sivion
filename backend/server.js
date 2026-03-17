@@ -14,7 +14,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 
 // ─── Ensure upload dirs exist ───────────────────────────────────────────────
 ['uploads/resumes', 'uploads/blog', 'uploads/portfolio'].forEach(dir => {
@@ -81,6 +81,7 @@ app.get('/api/admin/stats', require('./middleware/auth'), async (req, res) => {
         require('./models/Job').countDocuments({ isActive: true }),
         require('./models/Submission').countDocuments({ type: 'contact' }),
         require('./models/Submission').countDocuments({ type: 'contact', status: 'new' }),
+        require('./models/Application').countDocuments(),
         require('./models/Submission').countDocuments({ type: 'enquiry' })
       ])
     ]);

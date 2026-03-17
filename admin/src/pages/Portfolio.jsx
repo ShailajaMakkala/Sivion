@@ -55,7 +55,7 @@ export default function Portfolio() {
 
   const startEdit = (item) => {
     setForm({ title: item.title, client: item.client || '', category: item.category || 'Web', description: item.description || '', technologies: item.technologies || [], liveUrl: item.liveUrl || '', githubUrl: item.githubUrl || '', isFeatured: item.isFeatured || false, status: item.status || 'published', image: item.image || '' })
-    setEditId(item.id)
+    setEditId(item._id)
     setShowForm(true)
   }
 

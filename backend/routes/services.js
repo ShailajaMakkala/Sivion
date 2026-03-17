@@ -13,6 +13,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Public: Get single service
+router.get('/:id', async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) return res.status(404).json({ success: false, message: 'Service not found' });
+    res.json({ success: true, data: service });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // Admin: Get all services
 router.get('/admin/all', authMiddleware, async (req, res) => {
   try {

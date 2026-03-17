@@ -16,21 +16,28 @@ export default function Dashboard() {
   useEffect(() => {
     Promise.all([
       api.get('/admin/stats'),
-      api.get('/contact')
-    ]).then(([statsRes, contactsRes]) => {
+      api.get('/contact'),
+      api.get('/careers/admin/applications')
+    ]).then(([statsRes, contactsRes, appsRes]) => {
       setStats(statsRes.data.data)
-      setContacts(contactsRes.data.data?.slice(0, 5) || [])
+      
+      const mixed = [
+        ...(contactsRes.data.data || []).map(c => ({ ...c, dashboardType: 'contact' })),
+        ...(appsRes.data.data || []).map(a => ({ ...a, dashboardType: 'application' }))
+      ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      
+      setContacts(mixed.slice(0, 8))
     }).catch(console.error)
       .finally(() => setLoading(false))
   }, [])
 
   const statCards = [
-    { label: 'Total Projects',     value: stats?.totalProjects,     icon: Image,        color: '#38BDF8' },
-    { label: 'Blog Posts',         value: stats?.totalBlogPosts,    icon: FileText,     color: '#A78BFA' },
-    { label: 'Active Jobs',        value: stats?.activeJobs,        icon: Briefcase,    color: '#22C55E' },
-    { label: 'Contact Enquiries',  value: stats?.totalContacts,     icon: Mail,         color: '#F59E0B' },
-    { label: 'New Messages',       value: stats?.newContacts,       icon: MessageSquare,color: '#EC4899', sub: 'Unread' },
-    { label: 'Applications',       value: stats?.totalApplications, icon: Users,        color: '#06B6D4' },
+    { label: 'Total Projects',     value: stats?.totalProjects,     icon: Image,        color: '#38BDF8', to: '/portfolio' },
+    { label: 'Blog Posts',         value: stats?.totalBlogPosts,    icon: FileText,     color: '#A78BFA', to: '/blog' },
+    { label: 'Active Jobs',        value: stats?.activeJobs,        icon: Briefcase,    color: '#22C55E', to: '/careers' },
+    { label: 'Contact Enquiries',  value: stats?.totalContacts,     icon: Mail,         color: '#F59E0B', to: '/submissions?tab=contacts' },
+    { label: 'New Messages',       value: stats?.newContacts,       icon: MessageSquare,color: '#EC4899', sub: 'Unread', to: '/submissions?tab=contacts' },
+    { label: 'Applications',       value: stats?.totalApplications, icon: Users,        color: '#06B6D4', to: '/submissions?tab=applications' },
   ]
 
   return (
@@ -88,9 +95,9 @@ export default function Dashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-[#94A3B8] text-xs uppercase tracking-wide border-b border-white/5">
-                    <th className="text-left px-6 py-3">Name</th>
-                    <th className="text-left px-6 py-3">Email</th>
-                    <th className="text-left px-6 py-3 hidden md:table-cell">Message</th>
+                    <th className="text-left px-6 py-3">Type</th>
+                    <th className="text-left px-6 py-3">From</th>
+                    <th className="text-left px-6 py-3 hidden md:table-cell">Subject / Role</th>
                     <th className="text-left px-6 py-3">Date</th>
                     <th className="text-left px-6 py-3">Status</th>
                   </tr>
@@ -98,21 +105,28 @@ export default function Dashboard() {
                 <tbody>
                   {contacts.map((c) => (
                     <tr key={c._id || c.id} className="border-b border-white/5 hover:bg-white/3 transition-colors">
-                      <td className="px-6 py-3 text-white font-medium">{c.name}</td>
-                      <td className="px-6 py-3 text-[#94A3B8]">{c.email}</td>
+                      <td className="px-6 py-3">
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${c.dashboardType === 'application' ? 'bg-[#06B6D4]/20 text-[#06B6D4]' : 'bg-[#F59E0B]/20 text-[#F59E0B]'}`}>
+                          {c.dashboardType?.toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="px-6 py-3">
+                        <div className="text-white font-medium">{c.name}</div>
+                        <div className="text-[#94A3B8] text-xs">{c.email}</div>
+                      </td>
                       <td className="px-6 py-3 text-[#94A3B8] hidden md:table-cell max-w-xs truncate">
-                        {c.message?.substring(0, 60)}...
+                        {c.dashboardType === 'application' ? c.jobTitle : (c.subject || 'Contact Message')}
                       </td>
                       <td className="px-6 py-3 text-[#94A3B8]">
-                        {new Date(c.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                        {new Date(c.createdAt || c.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                       </td>
                       <td className="px-6 py-3">
                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                           c.status === 'new'
-                            ? 'bg-[#06B6D4]/15 text-[#06B6D4] border border-[#06B6D4]/20'
+                            ? 'bg-green-500/10 text-green-400 border border-green-500/20'
                             : 'bg-white/5 text-[#94A3B8] border border-white/10'
                         }`}>
-                          {c.status === 'new' ? '● New' : 'Read'}
+                          {c.status === 'new' ? '● New' : 'Processed'}
                         </span>
                       </td>
                     </tr>

@@ -9,18 +9,22 @@ import Portfolio from './pages/Portfolio';
 import Careers from './pages/Careers';
 import Blog from './pages/Blog';
 import ContactUs from './pages/ContactUs';
+import ServiceDetails from './pages/ServiceDetails';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsConditions from './pages/TermsConditions';
 import Disclaimer from './pages/Disclaimer';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <Toaster position="top-right" />
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/technologies" element={<Technologies />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/careers" element={<Careers />} />

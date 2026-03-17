@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const BlogPost = require('../models/BlogPost');
 const authMiddleware = require('../middleware/auth');
-const { upload } = require('../config/cloudinary');
+const { upload } = require('../config/multer');
 
 // Public: Get all published posts
 router.get('/', async (req, res) => {
@@ -39,14 +39,14 @@ router.get('/admin/all', authMiddleware, async (req, res) => {
 router.post('/admin', authMiddleware, upload.single('image'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.coverImage = req.file.path;
+    if (req.file) data.coverImage = `/uploads/blog/${req.file.filename}`;
     if (data.status === 'published' && !data.publishedDate) {
         data.publishedDate = new Date();
     }
     const post = await BlogPost.create(data);
     res.status(201).json({ success: true, data: post });
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 
@@ -54,14 +54,14 @@ router.post('/admin', authMiddleware, upload.single('image'), async (req, res) =
 router.put('/admin/:id', authMiddleware, upload.single('image'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.coverImage = req.file.path;
+    if (req.file) data.coverImage = `/uploads/blog/${req.file.filename}`;
     if (data.status === 'published' && !data.publishedDate) {
         data.publishedDate = new Date();
     }
     const post = await BlogPost.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json({ success: true, data: post });
   } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

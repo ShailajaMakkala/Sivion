@@ -3,32 +3,46 @@ import Layout from '../components/Layout'
 import ConfirmModal from '../components/ConfirmModal'
 import api from '../lib/api'
 import toast from 'react-hot-toast'
-import { Plus, Pencil, Trash2, X, Mail, Trash } from 'lucide-react'
+import { Plus, Pencil, Trash2, X, Mail, Trash, ExternalLink } from 'lucide-react'
+import { Link, useSearchParams } from 'react-router-dom'
 
 export default function Submissions() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const initialTab = searchParams.get('tab') || 'contacts'
+  
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(null)
   const [deleteTarget, setDeleteTarget] = useState(null)
-  const [tab, setTab] = useState('contacts')
+  const [tab, setTab] = useState(initialTab)
 
   const load = () => {
     setLoading(true)
-    const endpoint = tab === 'contacts' ? '/contact' : '/contact/enquiries'
+    let endpoint = '/contact'
+    if (tab === 'enquiries') endpoint = '/contact/enquiries'
+    if (tab === 'applications') endpoint = '/careers/admin/applications'
+    
     api.get(endpoint).then(r => setItems(r.data.data || [])).catch(() => toast.error('Failed to load')).finally(() => setLoading(false))
   }
   useEffect(load, [tab])
 
   const markRead = async (item) => {
     try {
-      await api.patch(`/contact/${item.id}/status`, { status: 'read' })
+      const endpoint = tab === 'applications' ? `/careers/admin/applications/${item._id}/status` : `/contact/${item._id}/status`
+      await api.patch(endpoint, { status: 'read' })
       toast.success('Marked as read')
       load()
     } catch { toast.error('Failed to update') }
   }
 
   const del = async () => {
-    try { await api.delete(`/contact/${deleteTarget}`); toast.success('Deleted'); setDeleteTarget(null); load() }
+    try {
+      const endpoint = tab === 'applications' ? `/careers/admin/applications/${deleteTarget}` : `/contact/${deleteTarget}`
+      await api.delete(endpoint)
+      toast.success('Deleted')
+      setDeleteTarget(null)
+      load()
+    }
     catch { toast.error('Delete failed') }
   }
 
@@ -42,7 +56,7 @@ export default function Submissions() {
   }
 
   return (
-    <Layout title="Contact Submissions">
+    <Layout title="Submissions & Applications">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex gap-2">
@@ -52,7 +66,11 @@ export default function Submissions() {
             </button>
             <button onClick={() => setTab('enquiries')}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${tab === 'enquiries' ? 'bg-[#06B6D4] text-white' : 'bg-[#0D1B3E] text-[#94A3B8] border border-white/10'}`}>
-              Enquiries / Quotes
+              Enquiries
+            </button>
+            <button onClick={() => setTab('applications')}
+              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${tab === 'applications' ? 'bg-[#06B6D4] text-white' : 'bg-[#0D1B3E] text-[#94A3B8] border border-white/10'}`}>
+              Job Applications
             </button>
           </div>
           {items.length > 0 && (
@@ -77,7 +95,7 @@ export default function Submissions() {
                   <tr className="text-[#94A3B8] text-xs uppercase tracking-wide border-b border-white/5">
                     <th className="text-left px-6 py-3">Name</th>
                     <th className="text-left px-6 py-3">Email</th>
-                    <th className="text-left px-6 py-3 hidden md:table-cell">{tab === 'contacts' ? 'Message Preview' : 'Service'}</th>
+                    <th className="text-left px-6 py-3 hidden md:table-cell">{tab === 'contacts' ? 'Message' : (tab === 'enquiries' ? 'Service' : 'Role / Resume')}</th>
                     <th className="text-left px-6 py-3 hidden lg:table-cell">Date</th>
                     <th className="text-left px-6 py-3">Status</th>
                     <th className="text-right px-6 py-3">Actions</th>
@@ -85,15 +103,23 @@ export default function Submissions() {
                 </thead>
                 <tbody>
                   {items.map(item => (
-                    <tr key={item.id} className={`border-b border-white/5 hover:bg-white/2 transition-colors cursor-pointer ${item.status === 'new' ? 'bg-[#06B6D4]/3' : ''}`}
+                    <tr key={item._id} className={`border-b border-white/5 hover:bg-white/2 transition-colors cursor-pointer ${item.status === 'new' ? 'bg-[#06B6D4]/3' : ''}`}
                       onClick={() => setSelected(item)}>
                       <td className="px-6 py-3 text-white font-medium">{item.name}</td>
                       <td className="px-6 py-3 text-[#94A3B8]">{item.email}</td>
                       <td className="px-6 py-3 text-[#94A3B8] hidden md:table-cell max-w-xs truncate">
-                        {tab === 'contacts' ? item.message?.substring(0, 50) + '...' : (item.service || '—')}
+                        {tab === 'contacts' ? item.message?.substring(0, 50) + '...' : 
+                         tab === 'enquiries' ? (item.service || '—') : 
+                         <div className="flex items-center gap-2">
+                            <span>{item.jobTitle}</span>
+                            <a href={item.resumeLink} target="_blank" rel="noreferrer" className="text-[#06B6D4] hover:underline flex items-center gap-1" onClick={e => e.stopPropagation()}>
+                              Resume <ExternalLink size={12} />
+                            </a>
+                         </div>
+                        }
                       </td>
                       <td className="px-6 py-3 text-[#94A3B8] hidden lg:table-cell">
-                        {new Date(item.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        {new Date(item.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </td>
                       <td className="px-6 py-3" onClick={e => e.stopPropagation()}>
                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${item.status === 'new' ? 'bg-[#06B6D4]/15 text-[#06B6D4] border-[#06B6D4]/20' : 'bg-white/5 text-[#94A3B8] border-white/10'}`}>
@@ -105,7 +131,7 @@ export default function Submissions() {
                           {item.status === 'new' && (
                             <button onClick={() => markRead(item)} className="text-[#94A3B8] hover:text-[#06B6D4] p-1.5 rounded hover:bg-[#06B6D4]/10 transition-colors text-xs">Mark Read</button>
                           )}
-                          <button onClick={() => setDeleteTarget(item.id)} className="text-[#94A3B8] hover:text-red-400 p-1.5 rounded hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
+                          <button onClick={() => setDeleteTarget(item._id)} className="text-[#94A3B8] hover:text-red-400 p-1.5 rounded hover:bg-red-500/10 transition-colors"><Trash2 size={15} /></button>
                         </div>
                       </td>
                     </tr>
